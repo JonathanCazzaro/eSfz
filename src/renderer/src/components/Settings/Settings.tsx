@@ -16,9 +16,11 @@ const Settings: React.FC = () => {
   } = useContext(AppData) as AppDataState;
   const actionerRef = useRef<HTMLLIElement>(null);
 
-  const handleSetSplashScreen = () => {
-    localStorage.setItem('welcome_screen', welcomeScreen ? '' : 'on');
-    setWelcomeScreen(!welcomeScreen);
+  const handleSetWelcomeScreen: React.ChangeEventHandler<HTMLInputElement> = ({
+    currentTarget: { checked },
+  }) => {
+    localStorage.setItem('welcome_screen', checked ? 'on' : '');
+    setWelcomeScreen(checked);
   };
 
   const handleSetSaveDir = async () => {
@@ -41,59 +43,59 @@ const Settings: React.FC = () => {
         handleClose={() => setIsOpen(false)}
         trigger={isOpen}
         closeWhitelist={[actionerRef]}
-        className='w-[38rem]'
+        className='modal-base w-[38rem]'
       >
         <button className='modal-close-button' onClick={() => setIsOpen(false)}>
           <CloseIcon />
         </button>
-        <header className='p-4 font-bold text-2xl uppercase border-b border-slate-800'>
+        <header className='border-b border-slate-800 p-4 text-2xl font-bold uppercase'>
           <h1 className='flex items-center gap-4'>
             <SettingsIcon size={38} />
             Paramètres
           </h1>
         </header>
         <div className='p-4'>
-          <h2 className='w-full bg-slate-800 text-slate-400 font-semibold pl-9 py-1 rounded-md'>
+          <h2 className='w-full rounded-md bg-slate-800 py-1 pl-9 font-semibold text-slate-400'>
             Général
           </h2>
-          <div className='px-2 mt-2 mb-2 border-b border-slate-500 pb-2'>
-            <div className='flex gap-3 items-center'>
+          <div className='mt-2 mb-2 border-b border-slate-500 px-2 pb-2'>
+            <div className='flex items-center gap-3'>
               <input
                 type='checkbox'
-                name='splashscreen'
-                id='splashscreen'
+                name='welcome-screen'
+                id='welcome-screen'
                 checked={welcomeScreen}
-                onChange={handleSetSplashScreen}
+                onChange={handleSetWelcomeScreen}
               />
-              <label htmlFor='splashscreen'>Ouvrir l'écran d'accueil au démarrage</label>
+              <label htmlFor='welcome-screen'>Ouvrir l'écran d'accueil au démarrage</label>
             </div>
           </div>
-          <div className='px-2 mb-4'>
-            <div className='flex gap-3 items-center whitespace-nowrap'>
+          <div className='mb-4 px-2'>
+            <div className='flex items-center gap-3 whitespace-nowrap'>
               <p>Répertoire d'enregistrement par défaut :</p>
-              <div className='bg-slate-100 rounded-lg w-full gap-2 flex items-center px-2'>
+              <div className='flex w-full items-center gap-2 rounded-lg bg-slate-100 px-2'>
                 <input
                   type='text'
                   value={saveDir}
                   readOnly
-                  className='bg-transparent w-full outline-none text-sm py-1'
+                  className='w-full bg-transparent py-1 text-sm outline-none'
                 />
-                <button className='border-l pl-2 border-slate-300' onClick={handleSetSaveDir}>
+                <button className='border-l border-slate-300 pl-2' onClick={handleSetSaveDir}>
                   <FolderIcon />
                 </button>
               </div>
             </div>
           </div>
-          <h2 className='w-full bg-slate-800 text-slate-400 font-semibold pl-9 py-1 rounded-md mb-2'>
+          <h2 className='mb-2 w-full rounded-md bg-slate-800 py-1 pl-9 font-semibold text-slate-400'>
             Entrée midi
           </h2>
-          <div className='px-2 mt-2 mb-4'>
+          <div className='mt-2 mb-4 px-2'>
             <MidiDeviceSelector />
           </div>
-          <h2 className='w-full bg-slate-800 text-slate-400 font-semibold pl-9 py-1 rounded-md mb-2'>
+          <h2 className='mb-2 w-full rounded-md bg-slate-800 py-1 pl-9 font-semibold text-slate-400'>
             Sortie audio principale
           </h2>
-          <div className='px-2 mt-2 mb-4'>
+          <div className='mt-2 mb-4 px-2'>
             <AudioDeviceSelector />
           </div>
         </div>

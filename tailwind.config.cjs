@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         abstract: "url('./src/assets/abstract.jpg')",
+        welcome: "url('./src/assets/welcome.jpg')",
       },
       fontFamily: {
         main: "'Glory', sans-serif",

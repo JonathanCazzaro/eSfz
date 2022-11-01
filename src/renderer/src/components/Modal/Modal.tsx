@@ -29,11 +29,8 @@ const Modal: React.FC<ModalProps> = ({
   return !!mountElement && trigger
     ? createPortal(
         <div className='fixed inset-0 z-30 flex items-center justify-center'>
-          <div className='fixed inset-0 z-30 bg-black bg-opacity-30 flex items-center justify-center'></div>
-          <div
-            className={`relative z-40 bg-slate-400 rounded-xl shadow-md ${className || ''}`}
-            ref={childrenRef}
-          >
+          <div className='fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-30'></div>
+          <div className={className || 'modal-base'} ref={childrenRef}>
             {children}
           </div>
         </div>,

@@ -1,15 +1,26 @@
 import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import Modal from '../Modal/Modal';
+import WelcomeScreen from '../WelcomeScreen/WelcomeScreen';
 
 const Main: React.FC = () => {
   const {
-    midiDevice: [device],
+    welcomeScreen: [welcomeScreen],
   } = useContext(AppData) as AppDataState;
+  const [isWelcomeScreenOpen, setIsWelcomeScreenOpen] = useState(welcomeScreen);
 
   return (
     <main className='h-full w-full'>
-      <p className='text-white'>Coucou !</p>
+      {welcomeScreen && (
+        <Modal
+          trigger={isWelcomeScreenOpen}
+          handleClose={() => setIsWelcomeScreenOpen(false)}
+          className='welcome-screen'
+        >
+          <WelcomeScreen />
+        </Modal>
+      )}
     </main>
   );
 };

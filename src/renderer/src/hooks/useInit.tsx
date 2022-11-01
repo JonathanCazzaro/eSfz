@@ -4,10 +4,10 @@ import { useContext, useEffect } from 'react';
 
 export const useInit = () => {
   const {
-    midiDevice: [midiDevice, setMidiDevice],
-    audioOutDevice: [audioOutDevice, setAudioOutDevice],
-    welcomeScreen: [welcomeScreen, setWelcomeScreen],
-    saveDir: [saveDir, setSaveDir],
+    midiDevice: [, setMidiDevice],
+    audioOutDevice: [, setAudioOutDevice],
+    welcomeScreen: [, setWelcomeScreen],
+    saveDir: [, setSaveDir],
   } = useContext(AppData) as AppDataState;
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export const useInit = () => {
 
     if (typeof config.welcomeScreen === 'string') setWelcomeScreen(!!config.welcomeScreen);
     else {
-      localStorage.setItem('splashscreen', 'on');
+      localStorage.setItem('welcome_screen', 'on');
       setWelcomeScreen(true);
     }
 
