@@ -1,0 +1,9 @@
+<svg viewBox="0 0 96.857 98.024" xmlns="http://www.w3.org/2000/svg">
+  <g paint-order="fill markers stroke" transform="translate(-31.793 -94.42)">
+    <rect width="35.014" height="35.611" x="31.793" y="156.834" ry="2.777" fill="#f0eabe"/>
+    <rect width="35.014" height="35.611" x="70.913" y="156.834" ry="2.777" fill="#f0eabe"/>
+    <rect width="35.014" height="35.611" x="31.793" y="116.844" ry="2.777" fill="#f0eabe"/>
+    <ellipse cx="88.42" cy="134.65" rx="16.692" ry="16.991" fill="#59ce8f"/>
+    <ellipse cx="88.42" cy="134.65" rx="35.229" ry="35.23" fill="none" stroke="#59ce8f" stroke-width="10" stroke-linejoin="round"/>
+  </g>
+</svg>
