@@ -24,7 +24,7 @@ const Settings: React.FC = () => {
   };
 
   const handleSetSaveDir = async () => {
-    const path = await window.fs.pickFolder(saveDir);
+    const path = await window.api.pickFolder(saveDir);
     if (path) {
       localStorage.setItem('save_dir', path);
       setSaveDir(path);

@@ -1,9 +1,9 @@
 import { ElectronAPI } from '@electron-toolkit/preload';
-import { FsApi } from './index';
+import { Api } from './index';
 
 declare global {
   interface Window {
     electron: ElectronAPI;
-    fs: FsApi;
+    api: Api;
   }
 }

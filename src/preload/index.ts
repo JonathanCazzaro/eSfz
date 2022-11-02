@@ -2,18 +2,20 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
-export interface FsApi {
+export interface Api {
   pickFolder: (defaultPath?: string) => Promise<string | null>;
+  openExternalLink: (link: string) => Promise<null>;
 }
 
-const fsApi: FsApi = {
+const api: Api = {
   pickFolder: (defaultPath) => ipcRenderer.invoke('dialog:pickDirectory', [defaultPath]),
+  openExternalLink: (link) => ipcRenderer.invoke('shell:openLink', [link]),
 };
 
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('fs', fsApi);
+    contextBridge.exposeInMainWorld('api', api);
   } catch (error) {
     console.error(error);
   }

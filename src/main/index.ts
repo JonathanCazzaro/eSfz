@@ -49,7 +49,7 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow();
 
-  ipcMain.handle('dialog:pickDirectory', async (e, args) => {
+  ipcMain.handle('dialog:pickDirectory', async (_e, args) => {
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
       title: 'Sélectionner un dossier',
@@ -57,6 +57,10 @@ app.whenReady().then(() => {
       defaultPath: args ? args[0] : undefined,
     });
     return canceled ? null : filePaths[0];
+  });
+
+  ipcMain.handle('shell:openLink', async (_e, args) => {
+    await shell.openExternal(args[0]);
   });
 
   app.on('activate', () => {
