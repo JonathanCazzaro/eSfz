@@ -5,9 +5,9 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
     width: 1280,
-    minWidth: 800,
+    minWidth: 912,
     height: 720,
-    minHeight: 600,
+    minHeight: 660,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux'
@@ -49,7 +49,7 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow();
 
-  ipcMain.handle('dialog:pickDirectory', async (e, args) => {
+  ipcMain.handle('dialog:pickDirectory', async (_e, args) => {
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
       title: 'Sélectionner un dossier',
@@ -57,6 +57,10 @@ app.whenReady().then(() => {
       defaultPath: args ? args[0] : undefined,
     });
     return canceled ? null : filePaths[0];
+  });
+
+  ipcMain.handle('shell:openLink', async (_e, args) => {
+    await shell.openExternal(args[0]);
   });
 
   app.on('activate', () => {

@@ -4,25 +4,17 @@ import { useContext, useEffect } from 'react';
 
 export const useInit = () => {
   const {
-    midiDevice: [midiDevice, setMidiDevice],
-    audioOutDevice: [audioOutDevice, setAudioOutDevice],
-    welcomeScreen: [welcomeScreen, setWelcomeScreen],
-    saveDir: [saveDir, setSaveDir],
+    midiDevice: [, setMidiDevice],
+    audioOutDevice: [, setAudioOutDevice],
+    saveDir: [, setSaveDir],
   } = useContext(AppData) as AppDataState;
 
   useEffect(() => {
     const config = {
       midiDeviceId: localStorage.getItem('midi_device_id'),
       audioOutDeviceId: localStorage.getItem('audio_out_device_id'),
-      welcomeScreen: localStorage.getItem('welcome_screen'),
       saveDir: localStorage.getItem('save_dir'),
     };
-
-    if (typeof config.welcomeScreen === 'string') setWelcomeScreen(!!config.welcomeScreen);
-    else {
-      localStorage.setItem('splashscreen', 'on');
-      setWelcomeScreen(true);
-    }
 
     if (config.saveDir) setSaveDir(config.saveDir);
     else {

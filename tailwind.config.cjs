@@ -4,8 +4,15 @@ module.exports = {
   content: ['./src/renderer/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      fontSize: {
+        m: '0.9rem',
+      },
+      boxShadow: {
+        m: '0 1.5px 0.25rem rgba(30, 41, 59, 0.5)',
+      },
       backgroundImage: {
         abstract: "url('./src/assets/abstract.jpg')",
+        welcome: "url('./src/assets/welcome.jpg')",
       },
       fontFamily: {
         main: "'Glory', sans-serif",

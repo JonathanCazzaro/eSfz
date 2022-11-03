@@ -1,6 +1,5 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext } from 'react';
 import Modal from '../Modal/Modal';
-import Navbutton from '../Navbar/Navbutton';
 import { HiOutlineCog8Tooth as SettingsIcon, HiOutlineXMark as CloseIcon } from 'react-icons/hi2';
 import { AiFillFolderOpen as FolderIcon } from 'react-icons/ai';
 import MidiDeviceSelector from './MidiDeviceSelector';
@@ -8,21 +7,18 @@ import AudioDeviceSelector from './AudioDeviceSelector';
 import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
 
-const Settings: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface SettingsProps {
+  isOpen: boolean;
+  handleClose: () => void;
+}
+
+const Settings: React.FC<SettingsProps> = ({ isOpen, handleClose }) => {
   const {
-    welcomeScreen: [welcomeScreen, setWelcomeScreen],
     saveDir: [saveDir, setSaveDir],
   } = useContext(AppData) as AppDataState;
-  const actionerRef = useRef<HTMLLIElement>(null);
-
-  const handleSetSplashScreen = () => {
-    localStorage.setItem('welcome_screen', welcomeScreen ? '' : 'on');
-    setWelcomeScreen(!welcomeScreen);
-  };
 
   const handleSetSaveDir = async () => {
-    const path = await window.fs.pickFolder(saveDir);
+    const path = await window.api.pickFolder(saveDir);
     if (path) {
       localStorage.setItem('save_dir', path);
       setSaveDir(path);
@@ -30,75 +26,54 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <>
-      <Navbutton
-        Icon={{ Component: SettingsIcon, className: 'scale-110' }}
-        label='Paramètres'
-        onClick={() => setIsOpen(true)}
-        nodeRef={actionerRef}
-      />
-      <Modal
-        handleClose={() => setIsOpen(false)}
-        trigger={isOpen}
-        closeWhitelist={[actionerRef]}
-        className='w-[38rem]'
-      >
-        <button className='modal-close-button' onClick={() => setIsOpen(false)}>
-          <CloseIcon />
-        </button>
-        <header className='p-4 font-bold text-2xl uppercase border-b border-slate-800'>
-          <h1 className='flex items-center gap-4'>
-            <SettingsIcon size={38} />
-            Paramètres
-          </h1>
-        </header>
-        <div className='p-4'>
-          <h2 className='w-full bg-slate-800 text-slate-400 font-semibold pl-9 py-1 rounded-md'>
-            Général
-          </h2>
-          <div className='px-2 mt-2 mb-2 border-b border-slate-500 pb-2'>
-            <div className='flex gap-3 items-center'>
+    <Modal
+      handleClose={handleClose}
+      trigger={isOpen}
+      className='modal-base w-[38rem]'
+    >
+      <button className='modal-close-button' onClick={handleClose}>
+        <CloseIcon />
+      </button>
+      <header className='border-b border-slate-800 p-4 text-2xl font-bold uppercase'>
+        <h1 className='flex items-center gap-4'>
+          <SettingsIcon size={38} />
+          Paramètres
+        </h1>
+      </header>
+      <div className='p-4'>
+        <h2 className='w-full rounded-md bg-slate-800 py-1 pl-9 font-semibold text-slate-400'>
+          Général
+        </h2>
+        <div className='my-4 px-2'>
+          <div className='flex items-center gap-3 whitespace-nowrap'>
+            <p>Répertoire d'enregistrement par défaut :</p>
+            <div className='flex w-full items-center gap-2 rounded-lg bg-slate-100 px-2'>
               <input
-                type='checkbox'
-                name='splashscreen'
-                id='splashscreen'
-                checked={welcomeScreen}
-                onChange={handleSetSplashScreen}
+                type='text'
+                value={saveDir}
+                readOnly
+                className='w-full bg-transparent py-1 text-sm outline-none'
               />
-              <label htmlFor='splashscreen'>Ouvrir l'écran d'accueil au démarrage</label>
+              <button className='border-l border-slate-300 pl-2' onClick={handleSetSaveDir}>
+                <FolderIcon />
+              </button>
             </div>
-          </div>
-          <div className='px-2 mb-4'>
-            <div className='flex gap-3 items-center whitespace-nowrap'>
-              <p>Répertoire d'enregistrement par défaut :</p>
-              <div className='bg-slate-100 rounded-lg w-full gap-2 flex items-center px-2'>
-                <input
-                  type='text'
-                  value={saveDir}
-                  readOnly
-                  className='bg-transparent w-full outline-none text-sm py-1'
-                />
-                <button className='border-l pl-2 border-slate-300' onClick={handleSetSaveDir}>
-                  <FolderIcon />
-                </button>
-              </div>
-            </div>
-          </div>
-          <h2 className='w-full bg-slate-800 text-slate-400 font-semibold pl-9 py-1 rounded-md mb-2'>
-            Entrée midi
-          </h2>
-          <div className='px-2 mt-2 mb-4'>
-            <MidiDeviceSelector />
-          </div>
-          <h2 className='w-full bg-slate-800 text-slate-400 font-semibold pl-9 py-1 rounded-md mb-2'>
-            Sortie audio principale
-          </h2>
-          <div className='px-2 mt-2 mb-4'>
-            <AudioDeviceSelector />
           </div>
         </div>
-      </Modal>
-    </>
+        <h2 className='mb-2 w-full rounded-md bg-slate-800 py-1 pl-9 font-semibold text-slate-400'>
+          Entrée midi
+        </h2>
+        <div className='my-2 px-2'>
+          <MidiDeviceSelector />
+        </div>
+        <h2 className='mb-2 w-full rounded-md bg-slate-800 py-1 pl-9 font-semibold text-slate-400'>
+          Sortie audio principale
+        </h2>
+        <div className='my-2 px-2'>
+          <AudioDeviceSelector />
+        </div>
+      </div>
+    </Modal>
   );
 };
 

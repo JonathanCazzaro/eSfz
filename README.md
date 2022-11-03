@@ -29,3 +29,5 @@ eSfz is a desktop app to design SFZ formatted virtual instruments. Plug in your 
 - [ ] Saving current project into json file
 - [ ] Loading existing project
 - [ ] SFZ export
+- [ ] EN version
+ 
