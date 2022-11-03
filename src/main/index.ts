@@ -5,9 +5,9 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
     width: 1280,
-    minWidth: 800,
+    minWidth: 912,
     height: 720,
-    minHeight: 600,
+    minHeight: 660,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux'

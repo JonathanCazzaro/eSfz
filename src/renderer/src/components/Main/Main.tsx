@@ -1,26 +1,26 @@
 import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
-import React, { useContext, useState } from 'react';
-import Modal from '../Modal/Modal';
+import React, { useContext } from 'react';
 import WelcomeScreen from '../WelcomeScreen/WelcomeScreen';
+import TabBar from './TabBar';
 
 const Main: React.FC = () => {
   const {
-    welcomeScreen: [welcomeScreen],
+    currentTab: [currentTab, setCurrentTab],
+    instruments: [instruments, setInstruments],
   } = useContext(AppData) as AppDataState;
-  const [isWelcomeScreenOpen, setIsWelcomeScreenOpen] = useState(welcomeScreen);
 
   return (
-    <main className='h-full w-full'>
-      {welcomeScreen && (
-        <Modal
-          trigger={isWelcomeScreenOpen}
-          handleClose={() => setIsWelcomeScreenOpen(false)}
-          className='welcome-screen'
-        >
-          <WelcomeScreen />
-        </Modal>
-      )}
+    <main className='flex flex-col w-full'>
+      <TabBar
+        currentTab={currentTab}
+        instruments={instruments}
+        setCurrentTab={setCurrentTab}
+        setInstruments={setInstruments}
+      />
+      <div className='p-6 h-full'>
+        <WelcomeScreen />
+      </div>
     </main>
   );
 };

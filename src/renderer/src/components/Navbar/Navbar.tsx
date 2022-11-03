@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Logo from '../../assets/logo_round.png';
 import Navbutton from './Navbutton';
 import {
@@ -6,11 +6,17 @@ import {
   HiOutlineFolderOpen as OpenFileIcon,
   HiOutlineQuestionMarkCircle as HelpIcon,
   HiOutlineArrowTopRightOnSquare as ExportIcon,
+  HiOutlineCog8Tooth as SettingsIcon,
 } from 'react-icons/hi2';
 import { IoSaveOutline as SaveIcon } from 'react-icons/io5';
-import Settings from '../Settings/Settings';
+import { AppData } from '@renderer/store';
+import { AppDataState } from '@renderer/types/types';
 
 const Navbar: React.FC = () => {
+  const {
+    settingsOpen: [, setSettingsOpen],
+  } = useContext(AppData) as AppDataState;
+
   return (
     <nav className='h-screen bg-slate-500 bg-opacity-50 shadow-md'>
       <ul className='flex h-full flex-col items-center gap-2 px-1 pb-2'>
@@ -37,7 +43,11 @@ const Navbar: React.FC = () => {
           label='Exporter en SFZ...'
           onClick={() => null}
         />
-        <Settings />
+        <Navbutton
+          Icon={{ Component: SettingsIcon, className: 'scale-110' }}
+          label='Paramètres'
+          onClick={() => setSettingsOpen(true)}
+        />
         <Navbutton
           className='mt-auto mb-0'
           Icon={{ Component: HelpIcon, className: 'scale-110' }}

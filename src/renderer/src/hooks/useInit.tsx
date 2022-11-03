@@ -6,7 +6,6 @@ export const useInit = () => {
   const {
     midiDevice: [, setMidiDevice],
     audioOutDevice: [, setAudioOutDevice],
-    welcomeScreen: [, setWelcomeScreen],
     saveDir: [, setSaveDir],
   } = useContext(AppData) as AppDataState;
 
@@ -14,15 +13,8 @@ export const useInit = () => {
     const config = {
       midiDeviceId: localStorage.getItem('midi_device_id'),
       audioOutDeviceId: localStorage.getItem('audio_out_device_id'),
-      welcomeScreen: localStorage.getItem('welcome_screen'),
       saveDir: localStorage.getItem('save_dir'),
     };
-
-    if (typeof config.welcomeScreen === 'string') setWelcomeScreen(!!config.welcomeScreen);
-    else {
-      localStorage.setItem('welcome_screen', 'on');
-      setWelcomeScreen(true);
-    }
 
     if (config.saveDir) setSaveDir(config.saveDir);
     else {
