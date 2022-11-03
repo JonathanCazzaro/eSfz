@@ -13,6 +13,7 @@ module.exports = {
       backgroundImage: {
         abstract: "url('./src/assets/abstract.jpg')",
         welcome: "url('./src/assets/welcome.jpg')",
+        paper: "url('./src/assets/paper.png')",
       },
       fontFamily: {
         main: "'Glory', sans-serif",

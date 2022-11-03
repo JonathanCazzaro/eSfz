@@ -11,9 +11,10 @@ import { AppDataState } from '@renderer/types/types';
 const WelcomeScreen: React.FC = () => {
   const {
     settingsOpen: [, setSettingsOpen],
+    newInstrumentOpen: [, setNewInstrumentOpen],
   } = useContext(AppData) as AppDataState;
   return (
-    <div className='h-full w-full flex flex-col items-center justify-center gap-14'>
+    <div className='flex h-full w-full flex-col items-center justify-center gap-14'>
       <img src={Logo} className='mx-auto max-w-xs drop-shadow-xl'></img>
       <div className='mx-auto flex max-w-[52rem] flex-col gap-2 rounded-md bg-slate-500 bg-opacity-30 py-6 px-8 text-slate-300'>
         <p>
@@ -25,7 +26,7 @@ const WelcomeScreen: React.FC = () => {
           Pour en savoir plus sur le format SFZ, rendez-vous sur
           <a
             href='https://sfzformat.com/'
-            className='underline-offset-3 ml-1.5 underline'
+            className='underline-offset-3 ml-1.5 underline hover:brightness-150'
             onClick={(e) => {
               e.preventDefault();
               window.api.openExternalLink('https://sfzformat.com/');
@@ -38,7 +39,7 @@ const WelcomeScreen: React.FC = () => {
         <div className='mt-2 flex items-center gap-4 whitespace-nowrap rounded-md bg-slate-500 bg-opacity-30 p-4'>
           <p className='text-slate-300'>Par quoi commence-t-on ?</p>
           <div className='flex w-full justify-center gap-4'>
-            <button className='secondary-button'>
+            <button className='secondary-button' onClick={() => setNewInstrumentOpen(true)}>
               <NewFileIcon />
               Créer un instrument
             </button>

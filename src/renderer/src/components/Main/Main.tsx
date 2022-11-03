@@ -11,16 +11,13 @@ const Main: React.FC = () => {
   } = useContext(AppData) as AppDataState;
 
   return (
-    <main className='flex flex-col w-full'>
-      <TabBar
-        currentTab={currentTab}
-        instruments={instruments}
-        setCurrentTab={setCurrentTab}
-        setInstruments={setInstruments}
-      />
-      <div className='p-6 h-full'>
-        <WelcomeScreen />
-      </div>
+    <main className='flex w-full flex-col'>
+      <TabBar />
+      {currentTab === 'welcome-screen' && (
+        <div className='h-full p-6'>
+          <WelcomeScreen />
+        </div>
+      )}
     </main>
   );
 };

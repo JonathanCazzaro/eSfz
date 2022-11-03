@@ -1,6 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import { Instrument } from '../preload/types';
+import { writeFile, mkdir } from 'fs/promises';
 
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
@@ -62,6 +64,20 @@ app.whenReady().then(() => {
   ipcMain.handle('shell:openLink', async (_e, args) => {
     await shell.openExternal(args[0]);
   });
+
+  ipcMain.handle(
+    'write:newInstrument',
+    async (_e, args: [Omit<Instrument, 'saved'>]): Promise<boolean> => {
+      try {
+        const [instrument] = args;
+        await writeFile(`${instrument.path}/settings.json`, JSON.stringify(instrument));
+        await mkdir(`${instrument.path}/samples`);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+  );
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

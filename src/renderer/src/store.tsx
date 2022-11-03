@@ -10,10 +10,19 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
   const currentTab = useState<Instrument | 'welcome-screen'>('welcome-screen');
   const saveDir = useState('');
   const settingsOpen = useState(false);
+  const newInstrumentOpen = useState(false);
 
   return (
     <AppData.Provider
-      value={{ midiDevice, audioOutDevice, saveDir, settingsOpen, instruments, currentTab }}
+      value={{
+        midiDevice,
+        audioOutDevice,
+        saveDir,
+        settingsOpen,
+        instruments,
+        currentTab,
+        newInstrumentOpen,
+      }}
     >
       {children}
     </AppData.Provider>

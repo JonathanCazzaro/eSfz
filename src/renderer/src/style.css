@@ -39,6 +39,10 @@
     @apply flex items-center gap-2 rounded-md bg-gradient-to-t from-slate-800 to-slate-600 px-3 text-base leading-7 text-slate-100 shadow-m transition-all hover:brightness-125;
   }
 
+  .cancel-button {
+    @apply primary-button from-red-900 to-red-700;
+  }
+
   .modal-base {
     @apply relative z-40 rounded-xl bg-slate-400 shadow-md;
   }
@@ -68,7 +72,7 @@
   }
 
   .add-tab-button {
-    @apply relative z-10 mt-1 ml-1.5 flex w-fit h-fit items-center justify-center rounded-full text-slate-400 transition hover:text-slate-300;
+    @apply relative z-10 mt-0.5 ml-1.5 flex w-fit h-fit items-center justify-center rounded-full text-slate-400 transition hover:text-slate-300;
   }
 }
 

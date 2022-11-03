@@ -15,6 +15,7 @@ import { AppDataState } from '@renderer/types/types';
 const Navbar: React.FC = () => {
   const {
     settingsOpen: [, setSettingsOpen],
+    newInstrumentOpen: [, setNewInstrumentOpen],
   } = useContext(AppData) as AppDataState;
 
   return (
@@ -26,7 +27,7 @@ const Navbar: React.FC = () => {
         <Navbutton
           Icon={{ Component: NewFileIcon }}
           label='Créer un instrument'
-          onClick={() => null}
+          onClick={() => setNewInstrumentOpen(true)}
         />
         <Navbutton
           Icon={{ Component: OpenFileIcon }}
