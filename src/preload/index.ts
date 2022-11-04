@@ -4,15 +4,17 @@ import { electronAPI } from '@electron-toolkit/preload';
 import { Instrument } from './types';
 
 export interface Api {
-  pickFolder: (defaultPath?: string) => Promise<string | null>;
+  pickFolder: (defaultPath: string) => Promise<string | null>;
   openExternalLink: (link: string) => Promise<null>;
-  writeNewInstrument: (config: Omit<Instrument, 'saved'>) => Promise<boolean>;
+  writeNewInstrument: (config: Instrument) => Promise<boolean>;
+  openInstrument: (defaultPath: string) => Promise<Instrument | null>;
 }
 
 const api: Api = {
   pickFolder: (defaultPath) => ipcRenderer.invoke('dialog:pickDirectory', [defaultPath]),
   openExternalLink: (link) => ipcRenderer.invoke('shell:openLink', [link]),
   writeNewInstrument: (config) => ipcRenderer.invoke('write:newInstrument', [config]),
+  openInstrument: (defaultPath) => ipcRenderer.invoke('read:instrument', [defaultPath]),
 };
 
 if (process.contextIsolated) {

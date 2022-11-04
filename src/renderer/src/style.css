@@ -32,7 +32,7 @@
 
 @layer components {
   .primary-button {
-    @apply rounded-md bg-gradient-to-t from-cyan-900 to-cyan-700 px-8 py-1 text-lg text-slate-100 shadow-m transition-all hover:brightness-125;
+    @apply block rounded-md bg-gradient-to-t from-cyan-900 to-cyan-700 px-8 py-1 text-lg text-slate-100 shadow-m transition-all hover:brightness-125;
   }
 
   .secondary-button {
@@ -68,11 +68,19 @@
   }
 
   .tab-button {
-    @apply ml-4 mr-1 bg-gray-800 brightness-125 rounded-t-md px-5 text-base leading-5 tracking-wide text-slate-300 border border-b-transparent border-slate-600;
+    @apply mr-1 rounded-t-md border border-slate-600 border-b-transparent bg-gray-800 px-5 text-base leading-5 tracking-wide text-slate-300 brightness-125;
+  }
+
+  .welcome-tab-button {
+    @apply ml-4 tab-button;
+  }
+
+  .instrument-tab-button {
+    @apply tab-button flex items-center gap-3 pr-3;
   }
 
   .add-tab-button {
-    @apply relative z-10 mt-0.5 ml-1.5 flex w-fit h-fit items-center justify-center rounded-full text-slate-400 transition hover:text-slate-300;
+    @apply relative z-10 mt-0.5 ml-1.5 flex h-fit w-fit items-center justify-center rounded-full text-slate-400 transition hover:text-slate-300;
   }
 }
 

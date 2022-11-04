@@ -16,7 +16,18 @@ const Navbar: React.FC = () => {
   const {
     settingsOpen: [, setSettingsOpen],
     newInstrumentOpen: [, setNewInstrumentOpen],
+    instruments: [instruments, setInstruments],
+    saveDir: [saveDir],
+    currentTab: [, setCurrentTab],
   } = useContext(AppData) as AppDataState;
+
+  const handleOpenInstrument = async () => {
+    const instrumentData = await window.api.openInstrument(saveDir);
+    if (instrumentData) {
+      setInstruments([...instruments, instrumentData]);
+      setCurrentTab(instrumentData);
+    }
+  };
 
   return (
     <nav className='h-screen bg-slate-500 bg-opacity-50 shadow-md'>
@@ -32,7 +43,7 @@ const Navbar: React.FC = () => {
         <Navbutton
           Icon={{ Component: OpenFileIcon }}
           label='Ouvrir un instrument...'
-          onClick={() => null}
+          onClick={handleOpenInstrument}
         />
         <Navbutton
           Icon={{ Component: SaveIcon, className: 'scale-[0.9]' }}

@@ -72,6 +72,7 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, handleClose }) => {
         <div className='my-2 px-2'>
           <AudioDeviceSelector />
         </div>
+        <button className='primary-button ml-auto mr-0 mt-4' onClick={handleClose}>Fermer la fenêtre</button>
       </div>
     </Modal>
   );

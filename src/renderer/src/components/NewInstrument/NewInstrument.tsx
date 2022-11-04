@@ -25,7 +25,7 @@ const NewInstrument: React.FC<NewInstrumentProps> = ({ handleClose, isOpen }) =>
     if (chosenPath) setPath(chosenPath);
   };
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const record: Instrument = {
       id: generateId(6),
@@ -33,15 +33,14 @@ const NewInstrument: React.FC<NewInstrumentProps> = ({ handleClose, isOpen }) =>
       author,
       path,
       samples: [],
-      saved: true,
     };
-    const { saved, ...data } = record;
-    const result = await window.api.writeNewInstrument(data);
-    if (result) {
-      setInstruments([...instruments, record]);
-      setCurrentTab(record);
-      handleClose();
-    }
+    window.api.writeNewInstrument(record).then((result) => {
+      if (result) {
+        setInstruments([...instruments, { ...record, saved: true }]);
+        setCurrentTab({ ...record, saved: true });
+        handleClose();
+      }
+    });
   };
 
   return (

@@ -14,7 +14,7 @@ const Main: React.FC = () => {
     <main className='flex w-full flex-col'>
       <TabBar />
       {currentTab === 'welcome-screen' && (
-        <div className='h-full p-6'>
+        <div className='p-6'>
           <WelcomeScreen />
         </div>
       )}

@@ -21,7 +21,7 @@ export interface Instrument {
   author: string;
   path: string;
   samples: Sample[];
-  saved: boolean;
+  saved?: boolean;
 }
 
 export interface Sample {
