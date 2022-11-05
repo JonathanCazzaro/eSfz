@@ -6,15 +6,19 @@
 
 @layer base {
   body {
-    @apply min-h-screen w-screen font-main text-lg font-medium text-gray-800;
+    @apply font-main text-lg font-medium text-gray-800;
   }
 
   #root {
-    @apply relative flex min-h-screen w-full bg-slate-800 bg-opacity-95;
+    @apply relative flex bg-slate-800 bg-opacity-[0.97];
+  }
+
+  #container {
+    @apply overflow-hidden rounded-md;
   }
 
   #background {
-    @apply fixed inset-0 h-full w-full bg-abstract bg-cover bg-center bg-no-repeat opacity-25 contrast-150 saturate-100;
+    @apply fixed inset-0 rounded-lg bg-abstract bg-cover bg-center bg-no-repeat contrast-50;
   }
 
   input[type='checkbox'] {
@@ -51,16 +55,12 @@
     @apply relative z-40 flex h-[33rem] w-[42rem] flex-col overflow-hidden rounded-lg bg-gradient-to-b from-slate-400 to-slate-300 shadow-2xl;
   }
 
-  /* .welcome-screen::after {
-    @apply absolute inset-0 bg-welcome bg-cover bg-center bg-no-repeat contrast-50 brightness-50 opacity-90 blur-sm scale-105 content-[''];
-  } */
-
   .navbar-button {
     @apply rounded-full p-3 text-2xl text-slate-100 hover:bg-slate-500;
   }
 
   .navbar-button-label {
-    @apply v-align absolute left-full ml-4 whitespace-nowrap rounded-md bg-slate-500 bg-opacity-30 px-3 font-medium leading-8 text-slate-100;
+    @apply v-align absolute left-full ml-4 whitespace-nowrap rounded-md bg-slate-600 shadow-m px-3 font-medium leading-8 text-slate-100;
   }
 
   .modal-close-button {
@@ -68,19 +68,23 @@
   }
 
   .tab-button {
-    @apply mr-1 rounded-t-md border border-slate-600 border-b-transparent bg-gray-800 px-5 text-base leading-5 tracking-wide text-slate-300 brightness-125;
+    @apply mr-1 rounded-t-md border border-slate-600 border-b-transparent bg-gray-800 px-5 text-base leading-5 tracking-wide text-slate-300 brightness-110;
   }
 
   .welcome-tab-button {
-    @apply ml-4 tab-button;
+    @apply tab-button undraggable;
   }
 
   .instrument-tab-button {
-    @apply tab-button flex items-center gap-3 pr-3;
+    @apply tab-button undraggable flex items-center gap-3 pr-3;
   }
 
   .add-tab-button {
-    @apply relative z-10 mt-0.5 ml-1.5 flex h-fit w-fit items-center justify-center rounded-full text-slate-400 transition hover:text-slate-300;
+    @apply undraggable relative z-10 mt-0.5 ml-1.5 flex h-fit w-fit items-center justify-center rounded-full text-slate-400 transition hover:text-slate-300;
+  }
+
+  .unsaved::after {
+    @apply absolute top-0 -right-1.5 h-1.5 w-1.5 rounded-full bg-red-600 content-[''];
   }
 }
 
@@ -95,5 +99,13 @@
 
   .vh-align {
     @apply v-align h-align;
+  }
+
+  .draggable {
+    -webkit-app-region: drag;
+  }
+
+  .undraggable {
+    -webkit-app-region: no-drag;
   }
 }

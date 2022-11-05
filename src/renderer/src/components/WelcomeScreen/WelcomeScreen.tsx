@@ -12,18 +12,8 @@ const WelcomeScreen: React.FC = () => {
   const {
     settingsOpen: [, setSettingsOpen],
     newInstrumentOpen: [, setNewInstrumentOpen],
-    instruments: [instruments, setInstruments],
-    saveDir: [saveDir],
-    currentTab: [, setCurrentTab],
+    openInstrument,
   } = useContext(AppData) as AppDataState;
-
-  const handleOpenInstrument = async () => {
-    const instrumentData = await window.api.openInstrument(saveDir);
-    if (instrumentData) {
-      setInstruments([...instruments, instrumentData]);
-      setCurrentTab(instrumentData);
-    }
-  };
 
   return (
     <div className='mt-2 flex w-full flex-col items-center justify-center gap-10'>
@@ -55,7 +45,7 @@ const WelcomeScreen: React.FC = () => {
               <NewFileIcon />
               Créer un instrument
             </button>
-            <button className='secondary-button' onClick={handleOpenInstrument}>
+            <button className='secondary-button' onClick={openInstrument}>
               <OpenFileIcon />
               Ouvrir un instrument
             </button>

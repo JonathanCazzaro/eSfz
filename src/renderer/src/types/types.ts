@@ -1,4 +1,4 @@
-type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
+export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
 
 export interface AppDataState {
   midiDevice: [WebMidi.MIDIInput | null, StateSetter<WebMidi.MIDIInput | null>];
@@ -6,8 +6,13 @@ export interface AppDataState {
   saveDir: [string, StateSetter<string>];
   settingsOpen: [boolean, StateSetter<boolean>];
   newInstrumentOpen: [boolean, StateSetter<boolean>];
+  quitConfirm: [number[], StateSetter<number[]>]
   instruments: [Instrument[], StateSetter<Instrument[]>];
-  currentTab: [Instrument | 'welcome-screen', StateSetter<Instrument | 'welcome-screen'>];
+  currentTabId: [number, StateSetter<number>];
+  openInstrument: () => void;
+  saveInstrument: () => void;
+  updateInstrument: (newVersion: Instrument) => void; 
+  closeInstrument: (id: number, savedCheck?: boolean) => void;
 }
 
 export interface AudioOutDevice {

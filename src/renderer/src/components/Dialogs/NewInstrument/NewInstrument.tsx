@@ -1,7 +1,7 @@
 import { AppData } from '@renderer/store';
 import { AppDataState, Instrument } from '@renderer/types/types';
 import React, { useContext, useState } from 'react';
-import Modal from '../Modal/Modal';
+import Modal from '../../Modal/Modal';
 import { AiFillFolderOpen as FolderIcon } from 'react-icons/ai';
 import { generateId } from '@renderer/utils/utils';
 
@@ -14,18 +14,18 @@ const NewInstrument: React.FC<NewInstrumentProps> = ({ handleClose, isOpen }) =>
   const {
     saveDir: [saveDir],
     instruments: [instruments, setInstruments],
-    currentTab: [, setCurrentTab],
+    currentTabId: [, setCurrentTabId],
   } = useContext(AppData) as AppDataState;
   const [path, setPath] = useState(saveDir);
   const [name, setName] = useState('');
   const [author, setAuthor] = useState('');
 
   const handleSetSaveDir = async () => {
-    const chosenPath = await window.api.pickFolder(saveDir);
-    if (chosenPath) setPath(chosenPath);
+    const { data } = await window.api.pickFolder(saveDir);
+    if (data) setPath(data);
   };
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const record: Instrument = {
       id: generateId(6),
@@ -33,14 +33,14 @@ const NewInstrument: React.FC<NewInstrumentProps> = ({ handleClose, isOpen }) =>
       author,
       path,
       samples: [],
+      saved: true,
     };
-    window.api.writeNewInstrument(record).then((result) => {
-      if (result) {
-        setInstruments([...instruments, { ...record, saved: true }]);
-        setCurrentTab({ ...record, saved: true });
-        handleClose();
-      }
-    });
+    const { data } = await window.api.writeInstrument(record);
+    if (data) {
+      setInstruments([...instruments, record]);
+      setCurrentTabId(record.id);
+      handleClose();
+    }
   };
 
   return (

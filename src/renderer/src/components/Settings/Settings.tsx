@@ -18,10 +18,10 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, handleClose }) => {
   } = useContext(AppData) as AppDataState;
 
   const handleSetSaveDir = async () => {
-    const path = await window.api.pickFolder(saveDir);
-    if (path) {
-      localStorage.setItem('save_dir', path);
-      setSaveDir(path);
+    const { data } = await window.api.pickFolder(saveDir);
+    if (data) {
+      localStorage.setItem('save_dir', data);
+      setSaveDir(data);
     }
   };
 

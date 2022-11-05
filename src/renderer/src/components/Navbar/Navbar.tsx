@@ -16,23 +16,16 @@ const Navbar: React.FC = () => {
   const {
     settingsOpen: [, setSettingsOpen],
     newInstrumentOpen: [, setNewInstrumentOpen],
-    instruments: [instruments, setInstruments],
-    saveDir: [saveDir],
-    currentTab: [, setCurrentTab],
+    currentTabId: [currentTabId],
+    instruments: [instruments],
+    saveInstrument,
+    openInstrument,
   } = useContext(AppData) as AppDataState;
-
-  const handleOpenInstrument = async () => {
-    const instrumentData = await window.api.openInstrument(saveDir);
-    if (instrumentData) {
-      setInstruments([...instruments, instrumentData]);
-      setCurrentTab(instrumentData);
-    }
-  };
 
   return (
     <nav className='h-screen bg-slate-500 bg-opacity-50 shadow-md'>
       <ul className='flex h-full flex-col items-center gap-2 px-1 pb-2'>
-        <li className='h-14 w-14 border-b border-slate-500 p-3 pb-4'>
+        <li className='draggable h-14 w-14 border-b border-slate-500 p-3 pb-4'>
           <img src={Logo} className='shadow-xl contrast-[0.85]' />
         </li>
         <Navbutton
@@ -43,12 +36,17 @@ const Navbar: React.FC = () => {
         <Navbutton
           Icon={{ Component: OpenFileIcon }}
           label='Ouvrir un instrument...'
-          onClick={handleOpenInstrument}
+          onClick={openInstrument}
         />
         <Navbutton
-          Icon={{ Component: SaveIcon, className: 'scale-[0.9]' }}
+          Icon={{ Component: SaveIcon, className: `scale-[0.9]` }}
           label='Enregistrer'
-          onClick={() => null}
+          onClick={saveInstrument}
+          className={
+            currentTabId && !instruments.find(({ id }) => id === currentTabId)?.saved
+              ? 'unsaved after:top-2.5 after:right-2.5 after:scale-125'
+              : undefined
+          }
         />
         <Navbutton
           Icon={{ Component: ExportIcon }}

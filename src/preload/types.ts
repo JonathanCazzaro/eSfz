@@ -11,3 +11,14 @@ export interface Sample {
   id: number;
   filename: string;
 }
+
+export interface Platform {
+  isMac: boolean;
+  isWindows: boolean;
+  isLinux: boolean;
+}
+
+export interface ApiResponse<T> {
+  data: T | null;
+  error: Error | null;
+}

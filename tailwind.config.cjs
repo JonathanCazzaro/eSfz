@@ -9,6 +9,7 @@ module.exports = {
       },
       boxShadow: {
         m: '0 1.5px 0.25rem rgba(30, 41, 59, 0.5)',
+        'inner-m': 'inner 0 0 0.25rem 0.25rem rgba(30, 41, 59, 0.5)',
       },
       backgroundImage: {
         abstract: "url('./src/assets/abstract.jpg')",

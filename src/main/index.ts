@@ -3,6 +3,7 @@ import * as path from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { Instrument } from '../preload/types';
 import { writeFile, mkdir, readFile } from 'fs/promises';
+import { setHandlers } from './handlers';
 
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
@@ -11,12 +12,10 @@ const createWindow = (): BrowserWindow => {
     height: 720,
     minHeight: 660,
     show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux'
-      ? {
-          icon: path.join(__dirname, '../../build/icon.png'),
-        }
-      : {}),
+    frame: process.platform === 'darwin' ? true : false,
+    transparent: true,
+    title: 'eSfz',
+    icon: process.platform === 'linux' ? path.join(__dirname, '../../build/icon.png') : undefined,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       nodeIntegration: false,
@@ -51,70 +50,7 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow();
 
-  ipcMain.handle('dialog:pickDirectory', async (_e, args: [string]) => {
-    try {
-      const [path] = args;
-      const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-        properties: ['openDirectory', 'createDirectory'],
-        title: 'Sélectionner un dossier',
-        buttonLabel: 'Sélectionner',
-        defaultPath: path,        
-      });
-      return canceled ? null : filePaths[0];
-    } catch (error) {
-      return null;
-    }
-  });
-
-  ipcMain.handle('shell:openLink', async (_e, args: [string]) => {
-    try {
-      const [url] = args;
-      await shell.openExternal(url);
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  ipcMain.handle('write:newInstrument', async (_e, args: [Instrument]): Promise<boolean> => {
-    try {
-      const [instrument] = args;
-      await writeFile(`${instrument.path}/${instrument.name}.esfz`, JSON.stringify(instrument), {
-        encoding: 'utf-8',
-      });
-      await mkdir(`${instrument.path}/samples`);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  });
-
-  ipcMain.handle('read:instrument', async (_e, args: [string]): Promise<Instrument | null> => {
-    try {
-      const [path] = args;
-      const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-        properties: ['openFile'],
-        title: 'Ouvrir un instrument',
-        buttonLabel: 'Ouvrir',
-        defaultPath: path,
-        filters: [
-          {
-            name: 'Instruments eSfz',
-            extensions: ['esfz'],
-          },
-        ],
-      });
-      if (!canceled) {
-        try {
-          const fileContent = await readFile(filePaths[0], { encoding: 'utf-8' });
-          return JSON.parse(fileContent);
-        } catch (error) {
-          return null;
-        }
-      } else return null;
-    } catch (error) {
-      return null;
-    }
-  });
+  setHandlers(mainWindow);
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
