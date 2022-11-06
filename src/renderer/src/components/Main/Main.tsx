@@ -13,7 +13,7 @@ const Main: React.FC = () => {
   } = useContext(AppData) as AppDataState;
 
   return (
-    <main className='flex w-full flex-col'>
+    <main className='w-full'>
       <TabBar />
       <div className='p-6'>
         {currentTabId ? (

@@ -5,13 +5,13 @@ import Main from '../Main/Main';
 import Navbar from '../Navbar/Navbar';
 import Settings from '../Settings/Settings';
 import NewInstrument from '../Dialogs/NewInstrument/NewInstrument';
-import QuitConfirm from '../Dialogs/QuitConfirm/QuitConfirm';
+import CloseConfirm from '../Dialogs/CloseConfirm/CloseConfirm';
 
 const App: React.FC = () => {
   const {
     settingsOpen: [settingsOpen, setSettingsOpen],
     newInstrumentOpen: [newInstrumentOpen, setNewInstrumentOpen],
-    quitConfirm: [quitConfirm, setQuitConfirm],
+    closeConfirm: [closeConfirm, setCloseConfirm],
   } = useContext(AppData) as AppDataState;
 
   return (
@@ -22,7 +22,13 @@ const App: React.FC = () => {
       {newInstrumentOpen && (
         <NewInstrument isOpen={newInstrumentOpen} handleClose={() => setNewInstrumentOpen(false)} />
       )}
-      {quitConfirm.length && <QuitConfirm instrumentIds={quitConfirm} />}
+      {!!closeConfirm.ids.length && (
+        <CloseConfirm
+          actionType={closeConfirm.actionType}
+          instrumentIds={closeConfirm.ids}
+          resetIds={() => setCloseConfirm({ actionType: null, ids: [] })}
+        />
+      )}
     </>
   );
 };

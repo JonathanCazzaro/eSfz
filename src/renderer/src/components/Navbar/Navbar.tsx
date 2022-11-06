@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
     newInstrumentOpen: [, setNewInstrumentOpen],
     currentTabId: [currentTabId],
     instruments: [instruments],
-    saveInstrument,
+    saveInstruments,
     openInstrument,
   } = useContext(AppData) as AppDataState;
 
@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
         <Navbutton
           Icon={{ Component: SaveIcon, className: `scale-[0.9]` }}
           label='Enregistrer'
-          onClick={saveInstrument}
+          onClick={() => currentTabId && saveInstruments([currentTabId])}
           className={
             currentTabId && !instruments.find(({ id }) => id === currentTabId)?.saved
               ? 'unsaved after:top-2.5 after:right-2.5 after:scale-125'

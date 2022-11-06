@@ -10,11 +10,11 @@
   }
 
   #root {
-    @apply relative flex bg-slate-800 bg-opacity-[0.97];
+    @apply relative w-full flex bg-slate-800 bg-opacity-[0.97];
   }
 
   #container {
-    @apply overflow-hidden rounded-md;
+    @apply overflow-hidden rounded-md w-full;
   }
 
   #background {

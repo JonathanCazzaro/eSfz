@@ -13,8 +13,16 @@ const TabBar: React.FC = () => {
     currentTabId: [currentTabId, setCurrentTabId],
     instruments: [instruments],
     newInstrumentOpen: [, setNewInstrumentOpen],
+    closeConfirm: [, setCloseConfirm],
     closeInstrument,
   } = useContext(AppData) as AppDataState;
+
+  const handleQuit = () => {
+    const unsavedInstruments = instruments.filter(({ saved }) => !saved);
+    if (unsavedInstruments.length)
+      setCloseConfirm({ actionType: 'quit', ids: unsavedInstruments.map(({ id }) => id) });
+    else window.api.quitApp();
+  };
 
   return (
     <div className='draggable relative flex h-10 w-full px-4 pt-2'>
@@ -51,13 +59,13 @@ const TabBar: React.FC = () => {
       {!window.api.getPlatform().isMac && (
         <div className='undraggable ml-auto mr-0 mb-2 flex items-center gap-4 text-slate-400'>
           <p className='mx-4 text-slate-300'>eSfz</p>
-          <button className='relative z-50' onClick={() => window.api.minimizeApp()}>
+          <button className='relative z-50' onClick={window.api.minimizeApp}>
             <MinimizeIcon className='mb-1 scale-125 hover:text-slate-200' />
           </button>
-          <button className='relative z-50' onClick={() => window.api.maximizeApp()}>
+          <button className='relative z-50' onClick={window.api.maximizeApp}>
             <MaximizeIcon className='mt-px hover:text-slate-200' />
           </button>
-          <button className='relative z-50' onClick={() => window.api.quitApp()}>
+          <button className='relative z-50' onClick={handleQuit}>
             <CloseIcon className='scale-110 hover:text-slate-200' />
           </button>
         </div>

@@ -6,12 +6,12 @@ export interface AppDataState {
   saveDir: [string, StateSetter<string>];
   settingsOpen: [boolean, StateSetter<boolean>];
   newInstrumentOpen: [boolean, StateSetter<boolean>];
-  quitConfirm: [number[], StateSetter<number[]>]
+  closeConfirm: [CloseConfirm, StateSetter<CloseConfirm>];
   instruments: [Instrument[], StateSetter<Instrument[]>];
   currentTabId: [number, StateSetter<number>];
-  openInstrument: () => void;
-  saveInstrument: () => void;
-  updateInstrument: (newVersion: Instrument) => void; 
+  openInstrument: () => Promise<void>;
+  saveInstruments: (ids: number[]) => Promise<void>;
+  updateInstrument: (newVersion: Instrument) => void;
   closeInstrument: (id: number, savedCheck?: boolean) => void;
 }
 
@@ -32,4 +32,9 @@ export interface Instrument {
 export interface Sample {
   id: number;
   filename: string;
+}
+
+export interface CloseConfirm {
+  ids: number[];
+  actionType: 'close' | 'quit' | null;
 }

@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useState } from 'react';
-import { AppDataState, AudioOutDevice, Instrument } from './types/types';
+import { AppDataState, AudioOutDevice, CloseConfirm, Instrument } from './types/types';
 
 export const AppData = createContext<AppDataState | null>(null);
 
@@ -8,8 +8,8 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
   const audioOutDevice = useState<AudioOutDevice | null>(null);
   const settingsOpen = useState(false);
   const newInstrumentOpen = useState(false);
-  const quitConfirm = useState<number[]>([]);
-  const [_quitConfirm, _setQuitConfirm] = quitConfirm;
+  const closeConfirm = useState<CloseConfirm>({ actionType: null, ids: [] });
+  const [, _setCloseConfirm] = closeConfirm;
 
   const instruments = useState<Instrument[]>([]);
   const [_instruments, _setInstruments] = instruments;
@@ -33,18 +33,16 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const saveInstrument = async () => {
-    if (_currentTabId) {
-      const update = _instruments.find(({ id }) => id === _currentTabId);
-      if (update && !update.saved) {
-        await window.api.writeInstrument(update);
-        _setInstruments(
-          _instruments.map((instrument) =>
-            instrument.id === update.id ? { ...instrument, saved: true } : instrument,
-          ),
-        );
-      }
+  const saveInstruments = async (ids: number[]) => {
+    const updates = _instruments.filter((instrument) => ids.includes(instrument.id));
+    for (const update of updates) {
+      if (!update.saved) await window.api.writeInstrument(update);
     }
+    _setInstruments(
+      _instruments.map((instrument) =>
+        ids.includes(instrument.id) ? { ...instrument, saved: true } : instrument,
+      ),
+    );
   };
 
   const updateInstrument = (newVersion: Instrument) => {
@@ -57,7 +55,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
     if (savedCheck) {
       const foundInstrument = _instruments.find((instrument) => instrument.id === id);
       if (foundInstrument && !foundInstrument.saved) {
-        _setQuitConfirm([id]);
+        _setCloseConfirm({ actionType: 'close', ids: [id] });
         return;
       }
     }
@@ -82,12 +80,12 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
         audioOutDevice,
         saveDir,
         settingsOpen,
-        quitConfirm,
+        closeConfirm,
         instruments,
         currentTabId,
         newInstrumentOpen,
         openInstrument,
-        saveInstrument,
+        saveInstruments,
         updateInstrument,
         closeInstrument,
       }}
