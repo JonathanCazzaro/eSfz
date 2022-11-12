@@ -21,14 +21,19 @@ eSfz is a desktop app to design SFZ formatted virtual instruments. Plug in your 
 - [x] Setting fonts and colors
 - [x] Navigation menu
 - [x] Settings window
-- [ ] Device graphical interface
-- [ ] Device events management
-- [ ] Samples importation
+- [x] Device graphical interface
+- [x] Device events management
+- [x] Samples importation
 - [ ] Basic sample triggering
+- [ ] Autosave
 - [x] Logic for accessing file system through UI
 - [x] Saving current project into json file
 - [x] Loading existing project
 - [ ] SFZ export
 - [ ] EN version
 - [ ] Handling errors from main process
+
+### Issues
+
+- __Audio output__ : cannot manage to use setSinkIk method of Audio elements to set output (triggers error *audio.ts:15 Uncaught (in promise) DOMException: The operation could not be performed and was aborted* in console). On the other hand it works if the audio elements are played straight and not mapped through the AudioContext.
  

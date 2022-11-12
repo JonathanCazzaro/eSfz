@@ -5,14 +5,16 @@ import {
   AiOutlineUndo as CancelIcon,
 } from 'react-icons/ai';
 
-interface FieldProps {
+interface TextFieldProps {
   id: string;
   label: string;
   value: string;
   setValue: (value: string) => void;
+  required?: boolean;
+  placeholder?: string;
 }
 
-const Field: React.FC<FieldProps> = ({ label, setValue, value, id }) => {
+const TextField: React.FC<TextFieldProps> = ({ label, setValue, value, id, required, placeholder }) => {
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -21,8 +23,17 @@ const Field: React.FC<FieldProps> = ({ label, setValue, value, id }) => {
     setTempValue(value);
   }, [value]);
 
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    setValue(tempValue);
+    setEditing(false);
+  };
+
   return (
-    <div className='flex flex-col overflow-hidden rounded border border-slate-600 shadow-lg'>
+    <form
+      className='flex flex-col overflow-hidden rounded border border-slate-600 shadow-lg shrink-0'
+      onSubmit={handleSubmit}
+    >
       <label
         htmlFor={id}
         className='flex items-center justify-between bg-gradient-to-t from-slate-800 to-slate-700 py-0.5 px-6 text-lg text-slate-300'
@@ -31,16 +42,11 @@ const Field: React.FC<FieldProps> = ({ label, setValue, value, id }) => {
         <div className='flex items-center gap-3'>
           {editing ? (
             <>
-              <button
-                className='block text-green-500 hover:brightness-150'
-                onClick={() => {
-                  setValue(tempValue);
-                  setEditing(false);
-                }}
-              >
+              <button type='submit' className='block text-green-500 hover:brightness-150'>
                 <ValidateIcon />
               </button>
               <button
+                type='button'
                 className='block text-red-600 hover:brightness-150'
                 onClick={() => {
                   setTempValue(value);
@@ -52,8 +58,10 @@ const Field: React.FC<FieldProps> = ({ label, setValue, value, id }) => {
             </>
           ) : (
             <button
+              type='button'
               className='block hover:brightness-200'
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setEditing(!editing);
                 inputRef.current?.focus();
               }}
@@ -71,10 +79,12 @@ const Field: React.FC<FieldProps> = ({ label, setValue, value, id }) => {
         readOnly={!editing}
         value={tempValue}
         onInput={({ currentTarget }) => setTempValue(currentTarget.value)}
-        className='bg-white bg-opacity-10 px-6 py-1 outline-none'
+        className='bg-white text-slate-300 bg-opacity-10 px-6 py-1 outline-none placeholder:italic'
+        required={required}
+        placeholder={placeholder}
       />
-    </div>
+    </form>
   );
 };
 
-export default Field;
+export default TextField;

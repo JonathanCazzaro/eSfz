@@ -6,4 +6,7 @@ declare global {
     electron: ElectronAPI;
     api: Api;
   }
+  interface HTMLMediaElement {
+    setSinkId: (id: string) => Promise<undefined>;
+  }
 }

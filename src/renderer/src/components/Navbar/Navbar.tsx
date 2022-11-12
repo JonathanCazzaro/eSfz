@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
         />
         <Navbutton
           Icon={{ Component: SaveIcon, className: `scale-[0.9]` }}
-          label='Enregistrer'
+          label="Enregistrer l'instrument courant"
           onClick={() => currentTabId && saveInstruments([currentTabId])}
           className={
             currentTabId && !instruments.find(({ id }) => id === currentTabId)?.saved

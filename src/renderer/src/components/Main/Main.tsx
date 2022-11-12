@@ -13,9 +13,9 @@ const Main: React.FC = () => {
   } = useContext(AppData) as AppDataState;
 
   return (
-    <main className='w-full'>
+    <main className='w-full relative'>
       <TabBar />
-      <div className='p-6'>
+      <div className='pt-11 h-full'>
         {currentTabId ? (
           <InstrumentEdit
             instrument={instruments.find(({ id }) => id === currentTabId) as Instrument}

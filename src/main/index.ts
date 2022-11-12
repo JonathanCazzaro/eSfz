@@ -1,8 +1,6 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, shell, BrowserWindow, protocol } from 'electron';
 import * as path from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import { Instrument } from '../preload/types';
-import { writeFile, mkdir, readFile } from 'fs/promises';
 import { setHandlers } from './handlers';
 
 const createWindow = (): BrowserWindow => {
@@ -41,8 +39,19 @@ const createWindow = (): BrowserWindow => {
   return mainWindow;
 };
 
+protocol.registerSchemesAsPrivileged([{ scheme: 'media', privileges: { bypassCSP: true, supportFetchAPI: true } }]);
+
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron');
+
+  protocol.registerFileProtocol('media', (request, callback) => {
+    const url = request.url.replace('media://', '');
+    try {
+      return callback(url);
+    } catch (err) {
+      return callback('Resource cannot be loaded.');
+    }
+  });
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);

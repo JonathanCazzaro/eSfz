@@ -1,3 +1,4 @@
+import { useMidiDevice } from '@renderer/hooks/useMidiDevice';
 import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
 import React, { useContext, useEffect, useState } from 'react';
@@ -7,24 +8,14 @@ import Selector from '../Selector/Selector';
 const MidiDeviceSelector: React.FC = () => {
   const {
     midiDevice: [device, setDevice],
+    midiDeviceModel: [, setMidiDeviceModel],
   } = useContext(AppData) as AppDataState;
-  const [error, setError] = useState('');
   const [availableDevices, setAvailableDevices] = useState<WebMidi.MIDIInput[]>([]);
   const [deviceList, setDeviceList] = useState<WebMidi.MIDIInput[]>([]);
-
-  const getDevices = async () => {
-    try {
-      const midiAccess = await navigator.requestMIDIAccess();
-      const parsedDevices = Array.from(midiAccess.inputs).map((input) => input[1]);
-      if (!device) setDevice(parsedDevices[0]);
-      setAvailableDevices(parsedDevices);
-    } catch (err) {
-      setError('Les périphériques MIDI sont inaccessibles !');
-    }
-  };
+  const { getDevices, error } = useMidiDevice(device);
 
   useEffect(() => {
-    getDevices();
+    getDevices().then((devices) => setAvailableDevices(devices || []));
   }, []);
 
   useEffect(() => {
@@ -32,21 +23,30 @@ const MidiDeviceSelector: React.FC = () => {
   }, [availableDevices, device]);
 
   return error ? (
-    <p className='bg-yellow-400 px-4 rounded-full text-base py-px flex items-center gap-4 shadow-md'>
+    <p className='flex items-center gap-4 rounded-full bg-yellow-400 px-4 py-px text-base shadow-md'>
       <ErrorIcon className='scale-125' />
       {error}
     </p>
   ) : (
-    <Selector selectedOption={device?.name} onRefresh={getDevices}>
+    <Selector
+      selectedOption={device?.name || 'Veuillez sélectionner une entrée'}
+      onRefresh={async () => {
+        const devices = await getDevices();
+        setAvailableDevices(devices || []);
+      }}
+    >
       {deviceList.length ? (
         deviceList.map((currentDevice) => (
           <li key={currentDevice.id}>
             <button
               onPointerDown={() => {
                 setDevice(currentDevice);
+                if (currentDevice.name?.includes('nanoPAD2')) {
+                  setMidiDeviceModel({ name: 'nanoPAD2', noteRange: [36, 51] });
+                } else setMidiDeviceModel({ name: undefined, noteRange: [0, 127] });
                 localStorage.setItem('midi_device_id', currentDevice.id);
               }}
-              className='hover:bg-slate-200 w-full text-left px-4 py-1'
+              className='w-full px-4 py-1 text-left hover:bg-slate-200'
             >
               {currentDevice?.name || 'Périphérique non identifié'}
             </button>

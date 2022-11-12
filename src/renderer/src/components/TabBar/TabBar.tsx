@@ -25,10 +25,10 @@ const TabBar: React.FC = () => {
   };
 
   return (
-    <div className='draggable relative flex h-10 w-full px-4 pt-2'>
+    <div className='draggable absolute top-0 left-0 flex h-10 w-full px-4 pt-2'>
       <div className='absolute inset-0 z-0 border-b border-slate-600 backdrop-brightness-50'></div>
       <button
-        className={`welcome-tab-button ${currentTabId ? 'border-b-slate-600 brightness-90' : ''}`}
+        className={`welcome-tab-button ${currentTabId ? 'border-b-slate-800 brightness-90' : ''}`}
         onClick={() => setCurrentTabId(0)}
       >
         Bienvenue

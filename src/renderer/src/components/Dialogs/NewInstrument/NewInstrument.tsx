@@ -3,7 +3,7 @@ import { AppDataState, Instrument } from '@renderer/types/types';
 import React, { useContext, useState } from 'react';
 import Modal from '../../Modal/Modal';
 import { AiFillFolderOpen as FolderIcon } from 'react-icons/ai';
-import { generateId } from '@renderer/utils/utils';
+import { generateId } from '@renderer/utils/general';
 
 interface NewInstrumentProps {
   isOpen: boolean;
@@ -33,6 +33,7 @@ const NewInstrument: React.FC<NewInstrumentProps> = ({ handleClose, isOpen }) =>
       author,
       path,
       samples: [],
+      mappings: [],
       saved: true,
     };
     const { data } = await window.api.writeInstrument(record);

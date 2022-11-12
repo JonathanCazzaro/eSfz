@@ -1,11 +1,21 @@
 import React, { createContext, ReactNode, useState } from 'react';
-import { AppDataState, AudioOutDevice, CloseConfirm, Instrument } from './types/types';
+import {
+  AppDataState,
+  AudioOutDevice,
+  CloseConfirm,
+  Instrument,
+  MidiDeviceModel,
+  Mode,
+} from './types/types';
 
 export const AppData = createContext<AppDataState | null>(null);
 
 const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
   const midiDevice = useState<WebMidi.MIDIInput | null>(null);
+  const midiDeviceModel = useState<MidiDeviceModel>({ name: undefined, noteRange: [0, 127] });
   const audioOutDevice = useState<AudioOutDevice | null>(null);
+
+  const mode = useState<Mode>('edition');
   const settingsOpen = useState(false);
   const newInstrumentOpen = useState(false);
   const closeConfirm = useState<CloseConfirm>({ actionType: null, ids: [] });
@@ -27,16 +37,25 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
       if (foundInstrument) {
         _setCurrentTabId(foundInstrument.id);
       } else {
-        _setInstruments([..._instruments, { ...data, saved: true }]);
+        _setInstruments([
+          ..._instruments,
+          {
+            ...data,
+            saved: true,
+          },
+        ]);
         _setCurrentTabId(data.id);
       }
     }
   };
 
   const saveInstruments = async (ids: number[]) => {
-    const updates = _instruments.filter((instrument) => ids.includes(instrument.id));
+    const updates = _instruments
+      .filter(({ id, saved }) => ids.includes(id) && !saved)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .map(({ saved, ...instrument }) => instrument);
     for (const update of updates) {
-      if (!update.saved) await window.api.writeInstrument(update);
+      await window.api.writeInstrument(update);
     }
     _setInstruments(
       _instruments.map((instrument) =>
@@ -69,7 +88,19 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
     });
     _setInstruments(update);
     if (currentTabId && _currentTabId === id) {
-      _setCurrentTabId(update.length ? update[instrumentIndex].id : 0);
+      _setCurrentTabId(update.length ? update[instrumentIndex - 1].id : 0);
+    }
+  };
+
+  const importSamples = async (instrument: Instrument) => {
+    const { data } = await window.api.importSamples(_saveDir, `${instrument.path}/samples`);
+    if (data) {
+      const update: Instrument = {
+        ...instrument,
+        samples: [...instrument.samples, ...data],
+        saved: false,
+      };
+      updateInstrument(update);
     }
   };
 
@@ -77,6 +108,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
     <AppData.Provider
       value={{
         midiDevice,
+        midiDeviceModel,
         audioOutDevice,
         saveDir,
         settingsOpen,
@@ -84,10 +116,12 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
         instruments,
         currentTabId,
         newInstrumentOpen,
+        mode,
         openInstrument,
         saveInstruments,
         updateInstrument,
         closeInstrument,
+        importSamples,
       }}
     >
       {children}

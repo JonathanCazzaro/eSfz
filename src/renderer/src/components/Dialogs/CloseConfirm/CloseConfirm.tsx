@@ -11,19 +11,32 @@ interface CloseConfirmProps {
 }
 
 const CloseConfirm: React.FC<CloseConfirmProps> = ({ instrumentIds, resetIds, actionType }) => {
-  const { closeInstrument, saveInstruments } = useContext(AppData) as AppDataState;
+  const {
+    closeInstrument,
+    saveInstruments,
+    instruments: [instruments],
+  } = useContext(AppData) as AppDataState;
 
   const handleClose = () => {
     closeInstrument(instrumentIds[0], false);
+    resetIds();
   };
 
   const handleQuit = () => {
     window.api.quitApp();
   };
 
-  const handleSaveAndCloseOrQuit = async () => {
-    await saveInstruments(instrumentIds);
-    actionType === 'close' ? handleClose() : handleQuit();
+  const handleSaveAndCloseOrQuit = async (save: boolean) => {
+    if (save) await saveInstruments(instrumentIds);
+    else {
+      await window.api.cleanInstruments(
+        instruments
+          .filter(({ id }) => instrumentIds.includes(id))
+          .map(({ id, path }) => ({ id, path })),
+      );
+    }
+    if (actionType === 'close') handleClose();
+    else handleQuit();
   };
 
   return (
@@ -41,11 +54,10 @@ const CloseConfirm: React.FC<CloseConfirmProps> = ({ instrumentIds, resetIds, ac
           <button className='cancel-button' onClick={resetIds}>
             Annuler
           </button>
-          <button
-            className='primary-button'
-            onClick={actionType === 'close' ? handleClose : handleQuit}
-          >{`${actionType === 'close' ? 'Fermer' : 'Quitter'} sans enregistrer`}</button>
-          <button className='primary-button' onClick={handleSaveAndCloseOrQuit}>
+          <button className='primary-button' onClick={() => handleSaveAndCloseOrQuit(false)}>{`${
+            actionType === 'close' ? 'Fermer' : 'Quitter'
+          } sans enregistrer`}</button>
+          <button className='primary-button' onClick={() => handleSaveAndCloseOrQuit(true)}>
             {instrumentIds.length === 1
               ? `Enregistrer et ${actionType === 'close' ? 'fermer' : 'quitter'}`
               : `Tout enregistrer et ${actionType === 'close' ? 'fermer' : 'quitter'}`}
