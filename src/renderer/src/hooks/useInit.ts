@@ -1,13 +1,16 @@
 import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
 import { useContext, useEffect } from 'react';
+import { useMidiDevice } from './useMidiDevice';
 
 export const useInit = () => {
   const {
     midiDevice: [, setMidiDevice],
+    midiDeviceModel: [, setMidiDeviceModel],
     audioOutDevice: [, setAudioOutDevice],
     saveDir: [, setSaveDir],
   } = useContext(AppData) as AppDataState;
+  const { getDevices } = useMidiDevice(null);
 
   useEffect(() => {
     const config = {
@@ -21,6 +24,18 @@ export const useInit = () => {
       const { env } = window.electron.process;
       localStorage.setItem('save_dir', env.HOME as string);
       setSaveDir(env.HOME as string);
+    }
+
+    if (config.midiDeviceId) {
+      getDevices().then((devices) => {
+        const foundDevice = devices?.find((input) => input.id === config.midiDeviceId);
+        if (foundDevice) {
+          setMidiDevice(foundDevice);
+          if (foundDevice.name?.includes('nanoPAD2')) {
+            setMidiDeviceModel({ name: 'nanoPAD2', noteRange: [36, 51] });
+          }
+        }
+      });
     }
 
     navigator.mediaDevices.enumerateDevices().then((devices) => {
@@ -42,14 +57,6 @@ export const useInit = () => {
               : parsedDevices[0].label,
         });
       }
-    });
-
-    navigator.requestMIDIAccess().then((midiAccess) => {
-      const foundDevice = Array.from(midiAccess.inputs).find(
-        (input) => input[1].id === config.midiDeviceId,
-      );
-      if (foundDevice) setMidiDevice(foundDevice[1]);
-      else setMidiDevice(midiAccess.inputs[0]);
     });
   }, []);
 };

@@ -16,6 +16,7 @@ const WelcomeScreenOption: React.FC<WelcomeScreenOptionProps> = ({ label, classN
           type='checkbox'
           name='welcome-screen'
           id='welcome-screen'
+          className='checkbox'
           checked={isActive}
           onChange={({ currentTarget: { checked } }) => {
             localStorage.setItem('welcome_screen', checked ? 'on' : '');

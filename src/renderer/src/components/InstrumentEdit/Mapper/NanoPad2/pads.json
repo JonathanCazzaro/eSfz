@@ -1,0 +1,68 @@
+{
+  "pads": [
+    {
+      "padId": 36,
+      "padLabel": "G# / User"
+    },
+    {
+      "padId": 37,
+      "padLabel": "C / Chromatic"
+    },
+    {
+      "padId": 38,
+      "padLabel": "A / minor1"
+    },
+    {
+      "padId": 39,
+      "padLabel": "C# / Major1"
+    },
+    {
+      "padId": 40,
+      "padLabel": "A# / minor2"
+    },
+    {
+      "padId": 41,
+      "padLabel": "D / Major2"
+    },
+    {
+      "padId": 42,
+      "padLabel": "B / m.Penta"
+    },
+    {
+      "padId": 43,
+      "padLabel": "D# / M.Penta"
+    },
+    {
+      "padId": 44,
+      "padLabel": "Range - / m.Blues"
+    },
+    {
+      "padId": 45,
+      "padLabel": "E / M.Blues"
+    },
+    {
+      "padId": 46,
+      "padLabel": "Range + / Raga"
+    },
+    {
+      "padId": 47,
+      "padLabel": "F / Bassline"
+    },
+    {
+      "padId": 48,
+      "padLabel": "Oct - / Ryukyu"
+    },
+    {
+      "padId": 49,
+      "padLabel": "F# / China"
+    },
+    {
+      "padId": 50,
+      "padLabel": "Oct + / 5th"
+    },
+    {
+      "padId": 51,
+      "padLabel": "G / 4th"
+    }
+  ]
+}

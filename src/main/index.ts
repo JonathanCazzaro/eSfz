@@ -1,6 +1,7 @@
-import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, shell, BrowserWindow, protocol } from 'electron';
 import * as path from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
+import { setHandlers } from './handlers';
 
 const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
@@ -9,12 +10,10 @@ const createWindow = (): BrowserWindow => {
     height: 720,
     minHeight: 660,
     show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux'
-      ? {
-          icon: path.join(__dirname, '../../build/icon.png'),
-        }
-      : {}),
+    frame: process.platform === 'darwin' ? true : false,
+    transparent: true,
+    title: 'eSfz',
+    icon: process.platform === 'linux' ? path.join(__dirname, '../../build/icon.png') : undefined,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       nodeIntegration: false,
@@ -40,8 +39,19 @@ const createWindow = (): BrowserWindow => {
   return mainWindow;
 };
 
+protocol.registerSchemesAsPrivileged([{ scheme: 'media', privileges: { bypassCSP: true, supportFetchAPI: true } }]);
+
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron');
+
+  protocol.registerFileProtocol('media', (request, callback) => {
+    const url = request.url.replace('media://', '');
+    try {
+      return callback(url);
+    } catch (err) {
+      return callback('Resource cannot be loaded.');
+    }
+  });
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
@@ -49,19 +59,7 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow();
 
-  ipcMain.handle('dialog:pickDirectory', async (_e, args) => {
-    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-      properties: ['openDirectory'],
-      title: 'Sélectionner un dossier',
-      buttonLabel: 'Sélectionner',
-      defaultPath: args ? args[0] : undefined,
-    });
-    return canceled ? null : filePaths[0];
-  });
-
-  ipcMain.handle('shell:openLink', async (_e, args) => {
-    await shell.openExternal(args[0]);
-  });
+  setHandlers(mainWindow);
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
