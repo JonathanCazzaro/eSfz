@@ -5,12 +5,11 @@ class AudioPlayer {
     this.context = new AudioContext({ sampleRate: 44100, latencyHint: 'interactive' });
   }
 
-  async play(src: string) {
+  play(src: string) {
     const sample = new Audio(`media://${src}`);
-    sample.preload = 'auto';
     const source = this.context.createMediaElementSource(sample);
     source.connect(this.context.destination);
-    await sample.play();
+    sample.play();
   }
 }
 

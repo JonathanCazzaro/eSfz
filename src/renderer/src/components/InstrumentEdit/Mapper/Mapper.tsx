@@ -21,7 +21,7 @@ const Mapper: React.FC<MapperProps> = ({ device, instrument, isDeviceOpen, devic
 
   const [noteId, setNoteId] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [velocity, setVelocity] = useState(0);
+  const [, setVelocity] = useState(0);
 
   const previousNoteId = usePrevious(noteId);
   const previousInstrumentId = usePrevious(instrument.id);
@@ -44,8 +44,8 @@ const Mapper: React.FC<MapperProps> = ({ device, instrument, isDeviceOpen, devic
   return (
     <div className='flex h-full w-full flex-col justify-center gap-6 rounded bg-white bg-opacity-25 p-6 text-lg text-neutral-300'>
       <div className='flex h-full w-full gap-6'>
-        <div className='flex h-full w-96 shrink-0 flex-col gap-4'>
-          <div className='flex items-center gap-4'>
+        <div className='flex h-full w-fit shrink-0 flex-col gap-4'>
+          <div className='flex items-center justify-between'>
             <label htmlFor='mode' className='text-slate-100'>
               Choix du mode
             </label>
@@ -66,13 +66,11 @@ const Mapper: React.FC<MapperProps> = ({ device, instrument, isDeviceOpen, devic
               </div>
             </div>
           </div>
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-8'>
             <label htmlFor='device-state' className='text-slate-100'>
               Etat du contrôleur
             </label>
-            <div
-              className={`switch w-44 ${isDeviceOpen ? 'bg-emerald-800' : 'bg-neutral-700'} `}
-            >
+            <div className={`switch w-44 ${isDeviceOpen ? 'bg-emerald-800' : 'bg-neutral-700'} `}>
               <input
                 type='checkbox'
                 id='device-state'
@@ -93,7 +91,12 @@ const Mapper: React.FC<MapperProps> = ({ device, instrument, isDeviceOpen, devic
         <NoteSetup noteId={noteId} />
       </div>
       {deviceModel.name === 'nanoPAD2' && (
-        <NanoPad2_Layout isPlaying={playing} padId={noteId} isActive={isDeviceOpen} />
+        <NanoPad2_Layout
+          isPlaying={playing}
+          padId={noteId}
+          isActive={isDeviceOpen}
+          setPadId={(padId) => setNoteId(padId)}
+        />
       )}
     </div>
   );

@@ -44,7 +44,7 @@ export interface Instrument {
 export interface Sample {
   id: number;
   name: string;
-  filename: string;
+  filename: string;  
 }
 
 export interface Mapping {

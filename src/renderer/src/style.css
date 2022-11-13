@@ -111,6 +111,10 @@
   .switch {
     @apply relative flex h-8 w-32 items-center overflow-hidden rounded-full border border-solid border-neutral-300 shadow-m transition-all;
   }
+
+  .nanopad-pad {
+    @apply rounded-sm bg-neutral-700 bg-opacity-50 shadow-center shadow-neutral-900 hover:brightness-125;
+  }
 }
 
 @layer utilities {

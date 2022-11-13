@@ -4,9 +4,10 @@ interface NanoPad2_LayoutProps {
   padId: number;
   isPlaying: boolean;
   isActive: boolean;
+  setPadId: (note: number) => void;
 }
 
-const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({ isPlaying, padId, isActive }) => {
+const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({ isActive, padId, setPadId }) => {
   const [currentScene, setCurrentScene] = useState(1);
 
   return (
@@ -90,11 +91,14 @@ const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({ isPlaying, padId, isA
       </div>
       <div className='mt-10 flex h-40 gap-8'>
         <div className='h-full w-72 rounded-sm bg-neutral-400'></div>
-        <div className='grid h-full w-full grid-cols-8 gap-4'>
-          {[36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51].map((pad) => (
+        <div className='grid h-full w-full grid-flow-col grid-cols-8 grid-rows-2 gap-4'>
+          {[37, 36, 39, 38, 41, 40, 43, 42, 45, 44, 47, 46, 49, 48, 51, 50].map((pad) => (
             <button
               key={`pad-${pad}`}
-              className='rounded-sm bg-neutral-700 bg-opacity-50 shadow-center shadow-neutral-900'
+              onClick={() => setPadId(pad)}
+              className={`nanopad-pad ${
+                padId === pad ? ' bg-neutral-600 shadow-emerald-400 hover:brightness-100' : ''
+              }`}
             ></button>
           ))}
         </div>
