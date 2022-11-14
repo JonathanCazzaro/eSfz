@@ -1,6 +1,14 @@
 {
   "pads": [
     {
+      "id": 1,
+      "label": "Axe X"
+    },
+    {
+      "id": 2,
+      "label": "Axe Y"
+    },
+    {
       "id": 36,
       "label": "G# / User"
     },

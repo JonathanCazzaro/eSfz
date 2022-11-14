@@ -6,6 +6,7 @@ import {
   Instrument,
   MidiDeviceModel,
   Mode,
+  Pad,
 } from './types/types';
 
 export const AppData = createContext<AppDataState | null>(null);
@@ -23,6 +24,9 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const instruments = useState<Instrument[]>([]);
   const [_instruments, _setInstruments] = instruments;
+
+  const pads = useState<Pad[]>([]);
+  const [_pads, _setPads] = pads;
 
   const currentTabId = useState<number>(0);
   const [_currentTabId, _setCurrentTabId] = currentTabId;
@@ -114,6 +118,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
         settingsOpen,
         closeConfirm,
         instruments,
+        pads,
         currentTabId,
         newInstrumentOpen,
         mode,

@@ -3,6 +3,10 @@
 module.exports = {
   content: ['./src/renderer/**/*.{ts,tsx}'],
   theme: {
+    screens: {
+      '+1184': { min: '1184px' },
+      '+1504': { min: '1504px' },
+    },
     extend: {
       fontSize: {
         xxs: '0.6rem',
@@ -12,7 +16,7 @@ module.exports = {
         m: '0 1.5px 0.25rem rgba(30, 41, 59, 0.5)',
         'inner-m': 'inner 0 0 0.25rem 0.25rem rgba(30, 41, 59, 0.5)',
         bright: '0 0 0.5rem 0.5rem rgba(255, 255, 255, 0.2)',
-        center: '0 0 0.1rem 0.1rem #000'
+        center: '0 0 0.1rem 0.1rem #000',
       },
       backgroundImage: {
         abstract: "url('./src/assets/abstract.jpg')",

@@ -1,7 +1,7 @@
 import { AppData } from '@renderer/store';
 import { AppDataState, Instrument } from '@renderer/types/types';
 import React, { useContext, useState } from 'react';
-import FileSourceField from './General/FileSourceField';
+import SampleSource from './General/SampleSource/SampleSource';
 import TextField from './General/TextField';
 import Mapper from './Mapper/Mapper';
 import { IoWarning as WarningIcon } from 'react-icons/io5';
@@ -16,8 +16,10 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
   const {
     midiDevice: [midiDevice],
     midiDeviceModel: [midiDeviceModel],
+    pads: [pads]
   } = useContext(AppData) as AppDataState;
   const { author, name } = instrument;
+  const [isLeftSectionVisible, setIsLeftSectionVisible] = useState(true);
   const [open, setOpen] = useState(true);
   const [connected, setConnected] = useState(true);
 
@@ -27,9 +29,14 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
   });
 
   return (
-    <div className='grid h-full w-full grid-cols-[2.5fr,7.5fr] gap-4 p-6'>
-      <aside className='flex h-full w-full flex-col gap-4 text-slate-400'>
+    <div className='flex h-full w-full gap-4 p-6'>
+      <aside
+        className={`flex h-full min-w-[20rem] max-w-[20rem] flex-col gap-4 overflow-hidden text-slate-400 transition-all duration-300 ease-in ${
+          isLeftSectionVisible ? 'w-full' : 'w-0 min-w-0'
+        }`}
+      >
         <TextField
+          className='w-80'
           id='name'
           label="Nom de l'instrument"
           value={name}
@@ -37,13 +44,21 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
           required
         />
         <TextField
+          className='w-80'
           id='author'
           label='Auteur'
           value={author}
           setValue={(author) => updateInstrument({ ...instrument, author, saved: false })}
           placeholder='Jimmy Page...'
         />
-        <FileSourceField label='Samples disponibles' instrument={instrument} />
+        <SampleSource
+          label='Samples disponibles'
+          className='w-80'
+          instrument={instrument}
+          enableImport
+          noDataMessage="Aucun sample n'est rattaché à cet instrument."
+          draggable={true}          
+        />
       </aside>
       {midiDevice && connected ? (
         midiDeviceModel.name ? (
@@ -52,9 +67,11 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
             instrument={instrument}
             isDeviceOpen={open}
             deviceModel={midiDeviceModel}
+            setConfigSection={() => setIsLeftSectionVisible(!isLeftSectionVisible)}
+            isConfigVisible={isLeftSectionVisible}
           />
         ) : (
-          <div className='flex items-center justify-center'>
+          <div className='flex items-center justify-center w-full'>
             <p className='h-fit w-fit rounded-lg bg-yellow-400 bg-opacity-75 p-6 text-center'>
               <WarningIcon className='mx-auto mb-2 text-6xl' />
               Votre périphérique MIDI n'est pas compatible.
@@ -64,7 +81,7 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
           </div>
         )
       ) : (
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-center w-full'>
           <p className='h-fit w-fit rounded-lg bg-yellow-400 bg-opacity-75 p-6 text-center'>
             <WarningIcon className='mx-auto mb-2 text-6xl' />
             Aucun périphérique MIDI ne semble être raccordé ou configuré.

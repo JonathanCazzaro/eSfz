@@ -56,6 +56,10 @@
     @apply flex items-center gap-2 rounded-md bg-gradient-to-t from-slate-800 to-slate-600 px-3 text-base leading-7 text-slate-100 shadow-m transition-all hover:brightness-125;
   }
 
+  .tertiary-button {
+    @apply absolute left-0 top-0 mx-auto mb-4 flex w-fit items-center gap-3 rounded-tl-md rounded-br-md bg-gradient-to-t from-neutral-300 to-neutral-100 px-4 py-0.5 text-base text-slate-600 shadow-m transition-all hover:brightness-110;
+  }
+
   .cancel-button {
     @apply primary-button from-red-900 to-red-700;
   }

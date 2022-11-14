@@ -16,7 +16,7 @@ export interface Sample {
 }
 
 export interface Mapping {
-  noteId: number;
+  padId: number;
   samplesIds: number[];
 }
 

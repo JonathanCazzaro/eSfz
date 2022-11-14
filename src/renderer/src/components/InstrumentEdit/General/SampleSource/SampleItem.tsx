@@ -12,9 +12,20 @@ import {
 
 type SampleItemProps = Sample & {
   instrument: Instrument;
+  allowModification: boolean;
+  removeOverride?: (id: number) => void;
+  draggable: boolean;
 };
 
-const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument }) => {
+const SampleItem: React.FC<SampleItemProps> = ({
+  id,
+  name,
+  filename,
+  instrument,
+  allowModification,
+  removeOverride,
+  draggable,
+}) => {
   const { updateInstrument } = useContext(AppData) as AppDataState;
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(name);
@@ -50,7 +61,15 @@ const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument 
   }, [name]);
 
   return (
-    <li className='rounded-m  px-4 py-0.5 text-slate-300 odd:bg-slate-800 odd:bg-opacity-50'>
+    <li
+      className={`rounded-md px-4  py-0.5 text-slate-300 odd:bg-slate-800 odd:bg-opacity-50  ${
+        draggable ? 'cursor-move border border-solid border-transparent hover:border-slate-300' : ''
+      }`}
+      draggable={draggable}
+      onDragStart={(e) => {
+        e.dataTransfer.setData('text/plain', id.toString());
+      }}
+    >
       <form className='flex items-center gap-2' onSubmit={handleSubmit}>
         <button
           className='hover:text-green-500'
@@ -67,8 +86,8 @@ const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument 
           required
           value={tempValue}
           className={`w-full px-2 outline-none ${
-            editing ? 'rounded-lg bg-slate-100 bg-opacity-10' : ' bg-transparent'
-          }`}
+            editing ? 'rounded-lg bg-slate-100 bg-opacity-10' : 'bg-transparent'
+          } ${draggable && !editing ? 'pointer-events-none cursor-move' : ''}`}
         />
         <div className='mr-0 ml-auto flex items-center gap-2'>
           {editing ? (
@@ -89,21 +108,23 @@ const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument 
             </>
           ) : (
             <>
-              <button
-                className='hover:brightness-150'
-                type='button'
-                onClick={(e) => {
-                  e.preventDefault();
-                  setEditing(!editing);
-                  inputRef.current?.focus();
-                }}
-              >
-                <EditIcon />
-              </button>
+              {allowModification && (
+                <button
+                  className='hover:brightness-150'
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setEditing(!editing);
+                    inputRef.current?.focus();
+                  }}
+                >
+                  <EditIcon />
+                </button>
+              )}
               <button
                 className='hover:text-red-500'
                 type='button'
-                onClick={() => handleDeleteSample(id)}
+                onClick={() => (removeOverride ? removeOverride(id) : handleDeleteSample(id))}
               >
                 <DeleteIcon />
               </button>

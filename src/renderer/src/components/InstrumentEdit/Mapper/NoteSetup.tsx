@@ -1,18 +1,34 @@
-import React from 'react';
-import { pads } from './NanoPad2/pads.json';
+import { AppData } from '@renderer/store';
+import { AppDataState, Instrument, Pad } from '@renderer/types/types';
+import React, { useContext } from 'react';
+import SampleSource from '../General/SampleSource/SampleSource';
 
 interface NoteSetupProps {
-  noteId: number;
+  noteId?: number;
+  instrument: Instrument;
 }
 
-const NoteSetup: React.FC<NoteSetupProps> = ({ noteId }) => {
+const NoteSetup: React.FC<NoteSetupProps> = ({ noteId, instrument }) => {
+  const {
+    pads: [pads],
+  } = useContext(AppData) as AppDataState;
+  const pad = pads.find(({ id }) => id === noteId) as Pad;
+
   return (
     <div className='flex h-full w-full flex-col overflow-hidden rounded border border-slate-600 shadow-lg'>
       <div className='flex items-center justify-between bg-gradient-to-t from-slate-800 to-slate-700 py-0.5 px-6 text-lg text-slate-300'>
-        Edition du pad {pads.find(({ padId }) => padId === noteId)?.padLabel}
+        Edition du
+        {` ${pad?.id <= 2 ? 'pavé tactile' : 'pad'} ${pad?.label}`}
       </div>
-      <div className='relative h-full'>
-        <ul className='scrollbar absolute top-0 left-0 right-0 flex h-full flex-col overflow-y-auto bg-white bg-opacity-10 px-2 py-4'></ul>
+      <div className='relative h-full bg-white bg-opacity-10 p-4'>
+        <SampleSource
+          label='Samples associés'
+          samples={pad?.affectedSamples || []}
+          className='w-2/5'
+          instrument={instrument}
+          enableImport={false}
+          noDataMessage="Aucun sample n'est encore rattaché à ce pad."
+        />
       </div>
     </div>
   );

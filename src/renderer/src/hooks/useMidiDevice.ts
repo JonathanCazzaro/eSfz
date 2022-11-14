@@ -6,7 +6,7 @@ interface BasicResponse {
 }
 
 type StateChangeCallback = (open: boolean, connected: boolean) => void;
-type NoteChangeCallback = (isPlaying: boolean, nodeId: number, velocity: number) => void;
+type NoteChangeCallback = (command: number, nodeId: number, velocity: number) => void;
 
 export function useMidiDevice(
   device: WebMidi.MIDIInput | null,
@@ -43,7 +43,7 @@ export function useMidiDevice(
 
   const handleNoteChange = ({ data }: WebMidi.MIDIMessageEvent) => {
     const [command, note, velocity] = data;
-    (onEvent as NoteChangeCallback)(command === 144, note, velocity);
+    (onEvent as NoteChangeCallback)(command, note, velocity);
   };
 
   useEffect(() => {

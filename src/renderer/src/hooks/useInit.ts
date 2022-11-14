@@ -2,6 +2,7 @@ import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
 import { useContext, useEffect } from 'react';
 import { useMidiDevice } from './useMidiDevice';
+import nanopad2 from '../devices_json/nanopad2.json';
 
 export const useInit = () => {
   const {
@@ -9,6 +10,7 @@ export const useInit = () => {
     midiDeviceModel: [, setMidiDeviceModel],
     audioOutDevice: [, setAudioOutDevice],
     saveDir: [, setSaveDir],
+    pads: [, setPads],
   } = useContext(AppData) as AppDataState;
   const { getDevices } = useMidiDevice(null);
 
@@ -33,6 +35,7 @@ export const useInit = () => {
           setMidiDevice(foundDevice);
           if (foundDevice.name?.includes('nanoPAD2')) {
             setMidiDeviceModel({ name: 'nanoPAD2', noteRange: [36, 51] });
+            setPads(nanopad2.pads.map((pad) => ({ ...pad, affectedSamples: [] })));
           }
         }
       });

@@ -9,6 +9,7 @@ export interface AppDataState {
   newInstrumentOpen: [boolean, StateSetter<boolean>];
   closeConfirm: [CloseConfirm, StateSetter<CloseConfirm>];
   instruments: [Instrument[], StateSetter<Instrument[]>];
+  pads: [Pad[], StateSetter<Pad[]>];
   currentTabId: [number, StateSetter<number>];
   mode: [Mode, StateSetter<Mode>];
   openInstrument: () => Promise<void>;
@@ -44,11 +45,17 @@ export interface Instrument {
 export interface Sample {
   id: number;
   name: string;
-  filename: string;  
+  filename: string;
+}
+
+export interface Pad {
+  id: number;
+  label: string;
+  affectedSamples: number[];
 }
 
 export interface Mapping {
-  noteId: number;
+  padId: number;
   samplesIds: number[];
 }
 
@@ -57,4 +64,5 @@ export interface CloseConfirm {
   actionType: 'close' | 'quit' | null;
 }
 
-export type Mode = "edition" | "play";
+export type Mode = 'edition' | 'play';
+export type Axis = 'x' | 'y' | undefined;

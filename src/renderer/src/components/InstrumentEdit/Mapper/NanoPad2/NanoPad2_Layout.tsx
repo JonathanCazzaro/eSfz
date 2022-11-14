@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
+import Pad from './Pad';
 
 interface NanoPad2_LayoutProps {
-  padId: number;
+  padId: number | undefined;
   isPlaying: boolean;
   isActive: boolean;
   setPadId: (note: number) => void;
+  isConfigVisible: boolean;
 }
 
-const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({ isActive, padId, setPadId }) => {
+const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({
+  isActive,
+  padId,
+  setPadId,
+  isConfigVisible,
+}) => {
   const [currentScene, setCurrentScene] = useState(1);
 
   return (
-    <div className='w-full rounded-2xl bg-neutral-800 p-6 shadow-m'>
+    <div
+      className={`+1504:h-align absolute bottom-0 left-0 w-[63rem] rounded-2xl bg-neutral-800 p-6 ${
+        isConfigVisible ? '+1504:h-align' : '+1184:h-align'
+      }`}
+    >
       <div className='flex h-5 items-start'>
         <div
           className={`h-1.5 w-8 rounded-full ${
@@ -90,16 +101,20 @@ const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({ isActive, padId, setP
         </div>
       </div>
       <div className='mt-10 flex h-40 gap-8'>
-        <div className='h-full w-72 rounded-sm bg-neutral-400'></div>
-        <div className='grid h-full w-full grid-flow-col grid-cols-8 grid-rows-2 gap-4'>
+        <div
+          className={`h-full w-1/3 rounded-sm bg-neutral-400 shadow-center ${
+            isActive && padId && padId <= 2 ? 'shadow-emerald-400' : 'shadow-neutral-900'
+          }`}
+        ></div>
+        <div className='grid h-full w-full grid-flow-col grid-cols-8 grid-rows-2 gap-3'>
           {[37, 36, 39, 38, 41, 40, 43, 42, 45, 44, 47, 46, 49, 48, 51, 50].map((pad) => (
-            <button
+            <Pad
               key={`pad-${pad}`}
-              onClick={() => setPadId(pad)}
-              className={`nanopad-pad ${
-                padId === pad ? ' bg-neutral-600 shadow-emerald-400 hover:brightness-100' : ''
-              }`}
-            ></button>
+              currentPad={padId}
+              padId={pad}
+              isActive={isActive}
+              setPadId={(id) => setPadId(id)}
+            />
           ))}
         </div>
       </div>
