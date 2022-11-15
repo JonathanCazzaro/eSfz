@@ -134,6 +134,7 @@ const Mapper: React.FC<MapperProps> = ({
             isActive={isDeviceOpen}
             setPadId={(padId) => setNoteId(padId)}
             isConfigVisible={isConfigVisible}
+            instrument={instrument}
           />
         )}
       </div>

@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import Pad from './Pad';
+import { AppData } from '@renderer/store';
+import { AppDataState, Instrument } from '@renderer/types/types';
+import React, { useContext, useEffect, useState } from 'react';
+import PlayPad from './PlayPad';
+import { padsData } from './pads.json';
 
 interface NanoPad2_LayoutProps {
   padId: number | undefined;
@@ -7,6 +10,7 @@ interface NanoPad2_LayoutProps {
   isActive: boolean;
   setPadId: (note: number) => void;
   isConfigVisible: boolean;
+  instrument: Instrument;
 }
 
 const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({
@@ -14,8 +18,34 @@ const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({
   padId,
   setPadId,
   isConfigVisible,
+  instrument,
 }) => {
   const [currentScene, setCurrentScene] = useState(1);
+  const {
+    updateInstrument,
+    pads: [pads, setPads],
+  } = useContext(AppData) as AppDataState;
+
+  useEffect(() => {
+    const foundMapping = instrument.mappings.find(({ device }) => device === 'nanoPAD2');
+    if (foundMapping) {
+      setPads(
+        foundMapping.pads.map(({ id, samples }) => ({
+          id,
+          label: pads.find((pad) => pad.id === id)?.label || '',
+          affectedSamples: samples,
+        })),
+      );
+    } else {
+      updateInstrument({
+        ...instrument,
+        mappings: [
+          ...instrument.mappings,
+          { device: 'nanoPAD2', pads: padsData.map(({ id }) => ({ id, samples: [] })) },
+        ],
+      });
+    }
+  }, [instrument]);
 
   return (
     <div
@@ -108,12 +138,13 @@ const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({
         ></div>
         <div className='grid h-full w-full grid-flow-col grid-cols-8 grid-rows-2 gap-3'>
           {[37, 36, 39, 38, 41, 40, 43, 42, 45, 44, 47, 46, 49, 48, 51, 50].map((pad) => (
-            <Pad
+            <PlayPad
               key={`pad-${pad}`}
               currentPad={padId}
               padId={pad}
               isActive={isActive}
               setPadId={(id) => setPadId(id)}
+              instrument={instrument}
             />
           ))}
         </div>

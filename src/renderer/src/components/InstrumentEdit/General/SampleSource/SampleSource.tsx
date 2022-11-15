@@ -1,6 +1,6 @@
 import { AppData } from '@renderer/store';
 import { AppDataState, Instrument } from '@renderer/types/types';
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import SampleSourceIcon from '../../../CustomIcons/SampleSourceIcon';
 import SampleList from './SampleList';
 
@@ -12,6 +12,7 @@ interface SampleSourceProps {
   enableImport: boolean;
   noDataMessage: string;
   draggable?: boolean;
+  handleDrop?: (value: string) => void;
 }
 
 const SampleSource: React.FC<SampleSourceProps> = ({
@@ -21,13 +22,31 @@ const SampleSource: React.FC<SampleSourceProps> = ({
   className,
   enableImport,
   noDataMessage,
-  draggable
+  draggable,
+  handleDrop,
 }) => {
   const { importSamples } = useContext(AppData) as AppDataState;
+  const componentRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
-      className={`flex h-full shrink flex-col overflow-hidden rounded border border-slate-600 shadow-lg ${className}`}
+      className={`flex h-full shrink flex-col overflow-hidden rounded relative shadow-lg ${className}`}
+      ref={componentRef}
+      onDragEnter={
+        handleDrop ? () => componentRef.current?.classList.add('dropzone-hover') : undefined
+      }
+      onDragLeave={
+        handleDrop ? () => componentRef.current?.classList.remove('dropzone-hover') : undefined
+      }
+      onDragOver={handleDrop ? (e) => e.preventDefault() : undefined}
+      onDrop={
+        handleDrop
+          ? (e) => {
+              componentRef.current?.classList.remove('dropzone-hover');
+              handleDrop(e.dataTransfer.getData('text/plain'));
+            }
+          : undefined
+      }
     >
       <div className='flex items-center justify-between bg-gradient-to-t from-slate-800 to-slate-700 py-0.5 px-6 text-lg text-slate-300'>
         {label}

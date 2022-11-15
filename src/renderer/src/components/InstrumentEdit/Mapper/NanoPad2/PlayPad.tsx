@@ -1,22 +1,33 @@
 import { AppData } from '@renderer/store';
-import { AppDataState } from '@renderer/types/types';
+import { AppDataState, Instrument, Pad } from '@renderer/types/types';
 import React, { useContext, useRef } from 'react';
 
-interface PadProps {
+interface PlayPadProps {
   isActive: boolean;
   currentPad?: number;
   padId: number;
   setPadId: (id: number) => void;
+  instrument: Instrument;
 }
 
-const Pad: React.FC<PadProps> = ({ currentPad, isActive, padId, setPadId }) => {
+const PlayPad: React.FC<PlayPadProps> = ({ currentPad, isActive, padId, setPadId, instrument }) => {
   const padRef = useRef<HTMLButtonElement>(null);
   const {
-    updateInstrument,
-    pads: [pads, setPads],
+    pads: [pads],
+    assignSample,
   } = useContext(AppData) as AppDataState;
 
-  const pad = pads.find((pad) => pad.id === padId);
+  const pad = pads.find((pad) => pad.id === padId) as Pad;
+
+  const handleDrop: React.DragEventHandler<HTMLButtonElement> = (e) => {
+    padRef.current?.classList.remove('bg-emerald-400');
+    assignSample({
+      deviceName: 'nanoPAD2',
+      instrument,
+      pad,
+      sampleId: Number(e.dataTransfer.getData('text/plain')),
+    });
+  };
 
   return (
     <button
@@ -25,14 +36,7 @@ const Pad: React.FC<PadProps> = ({ currentPad, isActive, padId, setPadId }) => {
       onDragEnter={() => padRef.current?.classList.add('bg-emerald-400')}
       onDragLeave={() => padRef.current?.classList.remove('bg-emerald-400')}
       onDragOver={(e) => e.preventDefault()}
-      onDrop={(e) => {
-        padRef.current?.classList.remove('bg-emerald-400');
-        const sampleId = Number(e.dataTransfer.getData('text/plain'));
-        if (pad) {
-          if (!pad.affectedSamples.includes(sampleId)) pad.affectedSamples.push(sampleId);
-          setPads([...pads.map((item) => (item.id === pad.id ? pad : item))]);
-        }
-      }}
+      onDrop={handleDrop}
       className={`nanopad-pad ${
         isActive && currentPad === padId
           ? ' bg-neutral-600 shadow-emerald-400 hover:brightness-100'
@@ -42,4 +46,4 @@ const Pad: React.FC<PadProps> = ({ currentPad, isActive, padId, setPadId }) => {
   );
 };
 
-export default Pad;
+export default PlayPad;

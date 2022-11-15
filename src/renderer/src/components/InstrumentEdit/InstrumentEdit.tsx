@@ -1,6 +1,6 @@
 import { AppData } from '@renderer/store';
 import { AppDataState, Instrument } from '@renderer/types/types';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SampleSource from './General/SampleSource/SampleSource';
 import TextField from './General/TextField';
 import Mapper from './Mapper/Mapper';
@@ -16,7 +16,7 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
   const {
     midiDevice: [midiDevice],
     midiDeviceModel: [midiDeviceModel],
-    pads: [pads]
+    pads: [pads, setPads],
   } = useContext(AppData) as AppDataState;
   const { author, name } = instrument;
   const [isLeftSectionVisible, setIsLeftSectionVisible] = useState(true);
@@ -57,7 +57,7 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
           instrument={instrument}
           enableImport
           noDataMessage="Aucun sample n'est rattaché à cet instrument."
-          draggable={true}          
+          draggable={true}
         />
       </aside>
       {midiDevice && connected ? (
@@ -71,7 +71,7 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
             isConfigVisible={isLeftSectionVisible}
           />
         ) : (
-          <div className='flex items-center justify-center w-full'>
+          <div className='flex w-full items-center justify-center'>
             <p className='h-fit w-fit rounded-lg bg-yellow-400 bg-opacity-75 p-6 text-center'>
               <WarningIcon className='mx-auto mb-2 text-6xl' />
               Votre périphérique MIDI n'est pas compatible.
@@ -81,7 +81,7 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
           </div>
         )
       ) : (
-        <div className='flex items-center justify-center w-full'>
+        <div className='flex w-full items-center justify-center'>
           <p className='h-fit w-fit rounded-lg bg-yellow-400 bg-opacity-75 p-6 text-center'>
             <WarningIcon className='mx-auto mb-2 text-6xl' />
             Aucun périphérique MIDI ne semble être raccordé ou configuré.

@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useState } from 'react';
 import {
   AppDataState,
+  AssignSamplesProps,
   AudioOutDevice,
   CloseConfirm,
   Instrument,
@@ -108,6 +109,28 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const assignSample = ({ deviceName, instrument, pad, sampleId }: AssignSamplesProps) => {
+    if (!pad.affectedSamples.includes(sampleId)) {
+      pad.affectedSamples.push(sampleId);
+      _setPads([..._pads.map((item) => (item.id === pad.id ? pad : item))]);
+      const foundMapping = instrument.mappings.find(({ device }) => device === deviceName);
+      if (foundMapping) {
+        const newSamples = foundMapping.pads.map(({ id, samples }) => ({
+          id,
+          samples: id === pad.id ? [...samples, sampleId] : samples,
+        }));
+        foundMapping.pads = newSamples;
+        updateInstrument({
+          ...instrument,
+          mappings: instrument.mappings.map((mapping) =>
+            mapping.device === foundMapping.device ? foundMapping : mapping,
+          ),
+          saved: false,
+        });
+      }
+    }
+  };
+
   return (
     <AppData.Provider
       value={{
@@ -127,6 +150,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
         updateInstrument,
         closeInstrument,
         importSamples,
+        assignSample,
       }}
     >
       {children}

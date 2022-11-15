@@ -145,4 +145,8 @@
   .scrollbar {
     @apply scrollbar:w-3 scrollbar-track:rounded-full scrollbar-track:bg-slate-200 scrollbar-thumb:rounded-full scrollbar-thumb:bg-slate-500;
   }
+
+  .dropzone-hover {
+    @apply outline outline-4 outline-emerald-400;
+  }
 }

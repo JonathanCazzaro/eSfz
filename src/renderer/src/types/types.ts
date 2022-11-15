@@ -17,6 +17,7 @@ export interface AppDataState {
   updateInstrument: (newVersion: Instrument) => void;
   closeInstrument: (id: number, savedCheck?: boolean) => void;
   importSamples: (instrument: Instrument) => Promise<void>;
+  assignSample: (props: AssignSamplesProps) => void;
 }
 
 export interface AudioOutDevice {
@@ -55,8 +56,11 @@ export interface Pad {
 }
 
 export interface Mapping {
-  padId: number;
-  samplesIds: number[];
+  device: MidiDeviceName;
+  pads: {
+    id: number;
+    samples: number[];
+  }[];
 }
 
 export interface CloseConfirm {
@@ -66,3 +70,10 @@ export interface CloseConfirm {
 
 export type Mode = 'edition' | 'play';
 export type Axis = 'x' | 'y' | undefined;
+
+export interface AssignSamplesProps {
+  instrument: Instrument;
+  pad: Pad;
+  sampleId: number;
+  deviceName: MidiDeviceName;
+}
