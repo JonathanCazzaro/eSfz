@@ -1,11 +1,12 @@
 import { useMidiDevice } from '@renderer/hooks/useMidiDevice';
 import { usePrevious } from '@renderer/hooks/useOriginalValue';
 import { AppData } from '@renderer/store';
-import { AppDataState, Axis, Instrument, MidiDeviceModel } from '@renderer/types/types';
+import { AppDataState, Instrument, MidiDeviceModel } from '@renderer/types/types';
 import React, { useContext, useEffect, useState } from 'react';
 import NanoPad2_Layout from './NanoPad2/NanoPad2_Layout';
 import NoteSetup from './NoteSetup';
 import { TbArrowBarToLeft as LeftIcon, TbArrowBarRight as RightIcon } from 'react-icons/tb';
+import { audioPlayer } from '@renderer/utils/audio';
 
 interface MapperProps {
   device: WebMidi.MIDIInput;
@@ -27,6 +28,8 @@ const Mapper: React.FC<MapperProps> = ({
   const {
     updateInstrument,
     mode: [mode, setMode],
+    pads: [pads],
+    midiDeviceModel: [midiDeviceModel],
   } = useContext(AppData) as AppDataState;
 
   const [noteId, setNoteId] = useState<number>();
@@ -46,11 +49,12 @@ const Mapper: React.FC<MapperProps> = ({
           setPlaying(false);
         }
         break;
-      case 144:
+      case 144: {
         setPlaying(true);
         setNoteId(note);
         setVelocity(velocity);
         break;
+      }
       case 128:
         setPlaying(false);
         break;
@@ -58,11 +62,17 @@ const Mapper: React.FC<MapperProps> = ({
   });
 
   useEffect(() => {
-    if (!playing && mode === 'play') {
-      setNoteId(undefined);
-      setVelocity(undefined);
+    if (mode === 'play') {
+      if (playing) {
+        const pad = pads.find(({ id }) => id === noteId);
+        const samples = instrument.samples.filter(({ id }) => pad?.affectedSamples.includes(id));
+        audioPlayer.play(samples.map(({ signal }) => signal));
+      } else {
+        setNoteId(undefined);
+        setVelocity(undefined);
+      }
     }
-  }, [playing, mode]);
+  }, [playing, noteId]);
 
   useEffect(() => {
     if (instrument.id !== previousInstrumentId) {
@@ -94,6 +104,11 @@ const Mapper: React.FC<MapperProps> = ({
                 className='input-switch'
                 onChange={({ currentTarget: { checked } }) => {
                   setMode(checked ? 'edition' : 'play');
+                  if (checked) setNoteId(midiDeviceModel.noteRange[0]);
+                  else {
+                    setNoteId(undefined);
+                    setVelocity(undefined);
+                  }
                 }}
               />
               <div className='flex w-full justify-between text-center text-sm font-semibold uppercase'>

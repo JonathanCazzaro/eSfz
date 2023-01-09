@@ -13,20 +13,18 @@ import {
 type SampleItemProps = Sample & {
   instrument: Instrument;
   allowModification: boolean;
-  removeOverride?: (id: number) => void;
   draggable: boolean;
 };
 
 const SampleItem: React.FC<SampleItemProps> = ({
   id,
   name,
-  filename,
+  signal,
   instrument,
   allowModification,
-  removeOverride,
   draggable,
 }) => {
-  const { updateInstrument } = useContext(AppData) as AppDataState;
+  const { updateInstrument, detachSample, midiDeviceModel } = useContext(AppData) as AppDataState;
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(name);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,12 +46,19 @@ const SampleItem: React.FC<SampleItemProps> = ({
     });
   };
 
-  const handleDeleteSample = async (sampleId: number) => {
-    updateInstrument({
-      ...instrument,
-      samples: instrument.samples.filter(({ id }) => id !== sampleId),
-      saved: false,
-    });
+  const handleRemoveSample = async (sampleId: number) => {
+    if (allowModification) {
+      updateInstrument({
+        ...instrument,
+        samples: instrument.samples.filter(({ id }) => id !== sampleId),
+        saved: false,
+      });
+    } else {
+      detachSample({
+        deviceName: midiDeviceModel[0].name
+      })
+    }
+
   };
 
   useEffect(() => {
@@ -74,7 +79,7 @@ const SampleItem: React.FC<SampleItemProps> = ({
         <button
           className='hover:text-green-500'
           type='button'
-          onClick={() => audioPlayer.play(`${instrument.path}/samples/${filename}`)}
+          onClick={() => audioPlayer.play(signal)}
         >
           <PlayIcon />
         </button>
@@ -124,7 +129,7 @@ const SampleItem: React.FC<SampleItemProps> = ({
               <button
                 className='hover:text-red-500'
                 type='button'
-                onClick={() => (removeOverride ? removeOverride(id) : handleDeleteSample(id))}
+                onClick={() => handleRemoveSample(id)}
               >
                 <DeleteIcon />
               </button>

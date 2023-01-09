@@ -14,14 +14,14 @@ const PlayPad: React.FC<PlayPadProps> = ({ currentPad, isActive, padId, setPadId
   const padRef = useRef<HTMLButtonElement>(null);
   const {
     pads: [pads],
-    assignSample,
+    attachSample,
   } = useContext(AppData) as AppDataState;
 
   const pad = pads.find((pad) => pad.id === padId) as Pad;
 
   const handleDrop: React.DragEventHandler<HTMLButtonElement> = (e) => {
     padRef.current?.classList.remove('bg-emerald-400');
-    assignSample({
+    attachSample({
       deviceName: 'nanoPAD2',
       instrument,
       pad,

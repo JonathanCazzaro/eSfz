@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { createContext, ReactNode, useState } from 'react';
 import {
   AppDataState,
-  AssignSamplesProps,
+  AttachSamplesProps,
   AudioOutDevice,
   CloseConfirm,
   Instrument,
@@ -9,6 +10,7 @@ import {
   Mode,
   Pad,
 } from './types/types';
+import { audioPlayer } from './utils/audio';
 
 export const AppData = createContext<AppDataState | null>(null);
 
@@ -35,6 +37,9 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
   const saveDir = useState('');
   const [_saveDir] = saveDir;
 
+  const importDir = useState('');
+  const [_importDir, _setImportDir] = importDir;
+
   const openInstrument = async () => {
     const { data } = await window.api.openInstrument(_saveDir);
     if (data) {
@@ -47,6 +52,10 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
           {
             ...data,
             saved: true,
+            samples: data.samples.map((newSample) => ({
+              ...newSample,
+              signal: audioPlayer.makeSource(`${data.path}/samples/${newSample.filename}`),
+            })),
           },
         ]);
         _setCurrentTabId(data.id);
@@ -57,8 +66,10 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
   const saveInstruments = async (ids: number[]) => {
     const updates = _instruments
       .filter(({ id, saved }) => ids.includes(id) && !saved)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(({ saved, ...instrument }) => instrument);
+      .map(({ saved, ...instrument }) => ({
+        ...instrument,
+        samples: instrument.samples.map(({ signal, ...sample }) => sample),
+      }));
     for (const update of updates) {
       await window.api.writeInstrument(update);
     }
@@ -98,28 +109,36 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const importSamples = async (instrument: Instrument) => {
-    const { data } = await window.api.importSamples(_saveDir, `${instrument.path}/samples`);
+    const { data } = await window.api.importSamples(_importDir, `${instrument.path}/samples`);
     if (data) {
+      if (data[0].directory) _setImportDir(data[0].directory);
+
       const update: Instrument = {
         ...instrument,
-        samples: [...instrument.samples, ...data],
+        samples: [
+          ...instrument.samples,
+          ...data.map((newSample) => ({
+            ...newSample,
+            signal: audioPlayer.makeSource(`${instrument.path}/samples/${newSample.filename}`),
+          })),
+        ],
         saved: false,
       };
       updateInstrument(update);
     }
   };
 
-  const assignSample = ({ deviceName, instrument, pad, sampleId }: AssignSamplesProps) => {
+  const attachSample = ({ deviceName, instrument, pad, sampleId }: AttachSamplesProps) => {
     if (!pad.affectedSamples.includes(sampleId)) {
-      pad.affectedSamples.push(sampleId);
-      _setPads([..._pads.map((item) => (item.id === pad.id ? pad : item))]);
+      const padCopy = { ...pad };
+      padCopy.affectedSamples.push(sampleId);
+      _setPads([..._pads.map((item) => (item.id === padCopy.id ? padCopy : item))]);
       const foundMapping = instrument.mappings.find(({ device }) => device === deviceName);
       if (foundMapping) {
-        const newSamples = foundMapping.pads.map(({ id, samples }) => ({
+        foundMapping.pads = foundMapping.pads.map(({ id, samples }) => ({
           id,
-          samples: id === pad.id ? [...samples, sampleId] : samples,
+          samples: id === padCopy.id ? [...samples, sampleId] : samples,
         }));
-        foundMapping.pads = newSamples;
         updateInstrument({
           ...instrument,
           mappings: instrument.mappings.map((mapping) =>
@@ -131,6 +150,28 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const detachSample = ({ deviceName, instrument, pad, sampleId }: AttachSamplesProps) => {
+    const padCopy: Pad = {
+      ...pad,
+      affectedSamples: pad.affectedSamples.filter((id) => id !== sampleId),
+    };
+    _setPads([..._pads.map((item) => (item.id === padCopy.id ? padCopy : item))]);
+    const foundMapping = instrument.mappings.find(({ device }) => device === deviceName);
+    if (foundMapping) {
+      foundMapping.pads = foundMapping.pads.map(({ id, samples }) => ({
+        id,
+        samples: id === padCopy.id ? samples.filter((id) => id !== sampleId) : samples,
+      }));
+      updateInstrument({
+        ...instrument,
+        mappings: instrument.mappings.map((mapping) =>
+          mapping.device === foundMapping.device ? foundMapping : mapping,
+        ),
+        saved: false,
+      });
+    }
+  };
+
   return (
     <AppData.Provider
       value={{
@@ -138,6 +179,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
         midiDeviceModel,
         audioOutDevice,
         saveDir,
+        importDir,
         settingsOpen,
         closeConfirm,
         instruments,
@@ -150,7 +192,8 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
         updateInstrument,
         closeInstrument,
         importSamples,
-        assignSample,
+        attachSample,
+        detachSample,
       }}
     >
       {children}

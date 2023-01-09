@@ -11,7 +11,7 @@ interface NoteSetupProps {
 const NoteSetup: React.FC<NoteSetupProps> = ({ noteId, instrument }) => {
   const {
     pads: [pads],
-    assignSample,
+    attachSample,
     midiDeviceModel: [midiDeviceModel],
   } = useContext(AppData) as AppDataState;
   const pad = pads.find(({ id }) => id === noteId) as Pad;
@@ -31,7 +31,7 @@ const NoteSetup: React.FC<NoteSetupProps> = ({ noteId, instrument }) => {
           enableImport={false}
           noDataMessage="Aucun sample n'est encore rattaché à ce pad."
           handleDrop={(value) =>
-            assignSample({
+            attachSample({
               deviceName: midiDeviceModel.name as MidiDeviceName,
               instrument,
               pad,

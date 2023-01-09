@@ -5,6 +5,7 @@ export interface AppDataState {
   midiDeviceModel: [MidiDeviceModel, StateSetter<MidiDeviceModel>];
   audioOutDevice: [AudioOutDevice | null, StateSetter<AudioOutDevice | null>];
   saveDir: [string, StateSetter<string>];
+  importDir: [string, StateSetter<string>];
   settingsOpen: [boolean, StateSetter<boolean>];
   newInstrumentOpen: [boolean, StateSetter<boolean>];
   closeConfirm: [CloseConfirm, StateSetter<CloseConfirm>];
@@ -17,7 +18,8 @@ export interface AppDataState {
   updateInstrument: (newVersion: Instrument) => void;
   closeInstrument: (id: number, savedCheck?: boolean) => void;
   importSamples: (instrument: Instrument) => Promise<void>;
-  assignSample: (props: AssignSamplesProps) => void;
+  attachSample: (props: AttachSamplesProps) => void;
+  detachSample: (props: AttachSamplesProps) => void;
 }
 
 export interface AudioOutDevice {
@@ -47,12 +49,13 @@ export interface Sample {
   id: number;
   name: string;
   filename: string;
+  signal: HTMLAudioElement;
 }
 
 export interface Pad {
   id: number;
   label: string;
-  affectedSamples: number[];
+  affectedSamples: number[];  
 }
 
 export interface Mapping {
@@ -71,7 +74,7 @@ export interface CloseConfirm {
 export type Mode = 'edition' | 'play';
 export type Axis = 'x' | 'y' | undefined;
 
-export interface AssignSamplesProps {
+export interface AttachSamplesProps {
   instrument: Instrument;
   pad: Pad;
   sampleId: number;

@@ -13,6 +13,7 @@ export interface Sample {
   id: number;
   name: string;
   filename: string;
+  directory?: string;
 }
 
 export type MidiDeviceName = 'nanoPAD2';

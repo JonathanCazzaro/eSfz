@@ -57,6 +57,7 @@ export const setHandlers = (window: BrowserWindow) => {
               id: generateId(8),
               filename: filePath,
               name: path.parse(filePath.split('/').at(-1) as string).name || '',
+              directory: path.parse(filePath).dir,
             }));
 
             for (const sample of response.data) {

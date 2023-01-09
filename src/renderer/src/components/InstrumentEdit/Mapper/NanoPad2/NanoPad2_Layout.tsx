@@ -2,7 +2,7 @@ import { AppData } from '@renderer/store';
 import { AppDataState, Instrument } from '@renderer/types/types';
 import React, { useContext, useEffect, useState } from 'react';
 import PlayPad from './PlayPad';
-import { padsData } from './pads.json';
+import nanopad2 from '../../../../devices_json/nanopad2.json';
 
 interface NanoPad2_LayoutProps {
   padId: number | undefined;
@@ -41,7 +41,7 @@ const NanoPad2_Layout: React.FC<NanoPad2_LayoutProps> = ({
         ...instrument,
         mappings: [
           ...instrument.mappings,
-          { device: 'nanoPAD2', pads: padsData.map(({ id }) => ({ id, samples: [] })) },
+          { device: 'nanoPAD2', pads: nanopad2.pads.map(({ id }) => ({ id, samples: [] })) },
         ],
       });
     }

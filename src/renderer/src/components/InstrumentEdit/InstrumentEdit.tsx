@@ -1,6 +1,6 @@
 import { AppData } from '@renderer/store';
 import { AppDataState, Instrument } from '@renderer/types/types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import SampleSource from './General/SampleSource/SampleSource';
 import TextField from './General/TextField';
 import Mapper from './Mapper/Mapper';
@@ -16,7 +16,6 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
   const {
     midiDevice: [midiDevice],
     midiDeviceModel: [midiDeviceModel],
-    pads: [pads, setPads],
   } = useContext(AppData) as AppDataState;
   const { author, name } = instrument;
   const [isLeftSectionVisible, setIsLeftSectionVisible] = useState(true);

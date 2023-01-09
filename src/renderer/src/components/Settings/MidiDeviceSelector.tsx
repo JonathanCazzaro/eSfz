@@ -47,7 +47,7 @@ const MidiDeviceSelector: React.FC = () => {
                   setMidiDeviceModel({ name: 'nanoPAD2', noteRange: [36, 51] });
                   setPads(nanopad2.pads.map((pad) => ({ ...pad, affectedSamples: [] })));
                 } else setMidiDeviceModel({ name: undefined, noteRange: [0, 127] });
-                localStorage.setItem('midi_device_id', currentDevice.id);
+                localStorage.setItem('midi_device_name', currentDevice.name || '');
               }}
               className='w-full px-4 py-1 text-left hover:bg-slate-200'
             >
