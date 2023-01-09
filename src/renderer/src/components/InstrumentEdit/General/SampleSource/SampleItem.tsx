@@ -14,6 +14,7 @@ type SampleItemProps = Sample & {
   instrument: Instrument;
   allowModification: boolean;
   draggable: boolean;
+  handleDelete: (sampleId: number) => void;
 };
 
 const SampleItem: React.FC<SampleItemProps> = ({
@@ -23,8 +24,9 @@ const SampleItem: React.FC<SampleItemProps> = ({
   instrument,
   allowModification,
   draggable,
+  handleDelete,
 }) => {
-  const { updateInstrument, detachSample, midiDeviceModel } = useContext(AppData) as AppDataState;
+  const { updateInstrument } = useContext(AppData) as AppDataState;
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(name);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,20 +48,21 @@ const SampleItem: React.FC<SampleItemProps> = ({
     });
   };
 
-  const handleRemoveSample = async (sampleId: number) => {
-    if (allowModification) {
-      updateInstrument({
-        ...instrument,
-        samples: instrument.samples.filter(({ id }) => id !== sampleId),
-        saved: false,
-      });
-    } else {
-      detachSample({
-        deviceName: midiDeviceModel[0].name
-      })
-    }
-
-  };
+  // const handleRemoveSample = async (sampleId: number) => {
+  //   if (allowModification) {
+  //     updateInstrument({
+  //       ...instrument,
+  //       samples: instrument.samples.filter(({ id }) => id !== sampleId),
+  //       saved: false,
+  //     });
+  //   } else if (midiDeviceModel[0].name) {
+  //     detachSample({
+  //       deviceName: midiDeviceModel[0].name,
+  //       instrument,
+  //       pad
+  //     })
+  //   }
+  // };
 
   useEffect(() => {
     setTempValue(name);
@@ -126,11 +129,7 @@ const SampleItem: React.FC<SampleItemProps> = ({
                   <EditIcon />
                 </button>
               )}
-              <button
-                className='hover:text-red-500'
-                type='button'
-                onClick={() => handleRemoveSample(id)}
-              >
+              <button className='hover:text-red-500' type='button' onClick={() => handleDelete(id)}>
                 <DeleteIcon />
               </button>
             </>

@@ -57,6 +57,13 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
           enableImport
           noDataMessage="Aucun sample n'est rattaché à cet instrument."
           draggable={true}
+          handleDelete={(sampleId) => {
+            updateInstrument({
+              ...instrument,
+              samples: instrument.samples.filter(({ id }) => id !== sampleId),
+              saved: false,
+            });
+          }}
         />
       </aside>
       {midiDevice && connected ? (

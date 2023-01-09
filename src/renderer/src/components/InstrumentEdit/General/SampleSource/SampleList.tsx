@@ -9,6 +9,7 @@ interface SampleListProps {
   enableImport: boolean;
   noDataMessage: string;
   importSamples: (instrument: Instrument) => Promise<void>;
+  handleDelete: (sampleId: number) => void;
   draggable?: boolean;
 }
 
@@ -18,6 +19,7 @@ const SampleList: React.FC<SampleListProps> = ({
   enableImport,
   noDataMessage,
   importSamples,
+  handleDelete,
   draggable
 }) => {
   return (
@@ -30,6 +32,7 @@ const SampleList: React.FC<SampleListProps> = ({
             instrument={instrument}
             allowModification={enableImport}
             draggable={draggable || false}
+            handleDelete={handleDelete}
           />
         ))
       ) : (

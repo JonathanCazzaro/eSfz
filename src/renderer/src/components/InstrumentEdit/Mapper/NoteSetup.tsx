@@ -12,6 +12,7 @@ const NoteSetup: React.FC<NoteSetupProps> = ({ noteId, instrument }) => {
   const {
     pads: [pads],
     attachSample,
+    detachSample,
     midiDeviceModel: [midiDeviceModel],
   } = useContext(AppData) as AppDataState;
   const pad = pads.find(({ id }) => id === noteId) as Pad;
@@ -38,6 +39,16 @@ const NoteSetup: React.FC<NoteSetupProps> = ({ noteId, instrument }) => {
               sampleId: Number(value),
             })
           }
+          handleDelete={(sampleId) => {
+            if (midiDeviceModel.name) {
+              detachSample({
+                deviceName: midiDeviceModel.name,
+                instrument,
+                pad,
+                sampleId,
+              });
+            }
+          }}
         />
       </div>
     </div>

@@ -150,7 +150,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const detachSample = ({ deviceName, instrument, pad, sampleId }: AttachSamplesProps) => {
+  const detachSample = ({ deviceName, instrument, pad, sampleId }: AttachSamplesProps) => {   
     const padCopy: Pad = {
       ...pad,
       affectedSamples: pad.affectedSamples.filter((id) => id !== sampleId),

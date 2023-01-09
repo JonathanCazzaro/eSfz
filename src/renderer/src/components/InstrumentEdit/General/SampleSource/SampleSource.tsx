@@ -13,6 +13,7 @@ interface SampleSourceProps {
   noDataMessage: string;
   draggable?: boolean;
   handleDrop?: (value: string) => void;
+  handleDelete: (sampleId: number) => void;
 }
 
 const SampleSource: React.FC<SampleSourceProps> = ({
@@ -24,6 +25,7 @@ const SampleSource: React.FC<SampleSourceProps> = ({
   noDataMessage,
   draggable,
   handleDrop,
+  handleDelete
 }) => {
   const { importSamples } = useContext(AppData) as AppDataState;
   const componentRef = useRef<HTMLDivElement>(null);
@@ -68,6 +70,7 @@ const SampleSource: React.FC<SampleSourceProps> = ({
           importSamples={importSamples}
           noDataMessage={noDataMessage}
           draggable={draggable}
+          handleDelete={handleDelete}
         />
       </div>
     </div>
