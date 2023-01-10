@@ -24,7 +24,7 @@ eSfz is a desktop app to design SFZ formatted virtual instruments. Plug in your 
 - [x] Device graphical interface
 - [x] Device events management
 - [x] Samples importation
-- [ ] Basic sample triggering
+- [x] Basic sample triggering
 - [ ] Autosave
 - [x] Logic for accessing file system through UI
 - [x] Saving current project into json file

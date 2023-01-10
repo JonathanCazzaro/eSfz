@@ -134,11 +134,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
       padCopy.affectedSamples.push(sampleId);
       _setPads([..._pads.map((item) => (item.id === padCopy.id ? padCopy : item))]);
       const foundMapping = instrument.mappings.find(({ device }) => device === deviceName);
-      if (foundMapping) {
-        foundMapping.pads = foundMapping.pads.map(({ id, samples }) => ({
-          id,
-          samples: id === padCopy.id ? [...samples, sampleId] : samples,
-        }));
+      if (foundMapping) {        
         updateInstrument({
           ...instrument,
           mappings: instrument.mappings.map((mapping) =>

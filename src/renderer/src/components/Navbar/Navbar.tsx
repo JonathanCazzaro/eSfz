@@ -5,7 +5,6 @@ import {
   HiOutlineDocumentPlus as NewFileIcon,
   HiOutlineFolderOpen as OpenFileIcon,
   HiOutlineQuestionMarkCircle as HelpIcon,
-  HiOutlineArrowTopRightOnSquare as ExportIcon,
   HiOutlineCog8Tooth as SettingsIcon,
 } from 'react-icons/hi2';
 import { IoSaveOutline as SaveIcon } from 'react-icons/io5';
@@ -49,11 +48,6 @@ const Navbar: React.FC = () => {
           }
         />
         <Navbutton
-          Icon={{ Component: ExportIcon }}
-          label='Exporter en SFZ...'
-          onClick={() => null}
-        />
-        <Navbutton
           Icon={{ Component: SettingsIcon, className: 'scale-110' }}
           label='Paramètres'
           onClick={() => setSettingsOpen(true)}
@@ -62,7 +56,7 @@ const Navbar: React.FC = () => {
           className='mt-auto mb-0'
           Icon={{ Component: HelpIcon, className: 'scale-110' }}
           label='Aide'
-          onClick={() => null}
+          onClick={() => window.api.openExternalLink('https://github.com/JonathanCazzaro/eSfz')}
         />
       </ul>
     </nav>

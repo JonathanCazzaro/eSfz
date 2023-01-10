@@ -51,6 +51,7 @@ const NoteSetup: React.FC<NoteSetupProps> = ({ noteId, instrument }) => {
           }}
         />
       </div>
+      <div></div>
     </div>
   );
 };

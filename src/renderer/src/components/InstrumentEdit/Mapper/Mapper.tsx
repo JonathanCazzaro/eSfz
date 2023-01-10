@@ -139,7 +139,7 @@ const Mapper: React.FC<MapperProps> = ({
             </div>
           </div>
         </div>
-        <NoteSetup noteId={noteId} instrument={instrument} />
+        {mode === 'edition' && <NoteSetup noteId={noteId} instrument={instrument} />}
       </div>
       <div className='scrollbar relative h-[17rem] shrink-0 overflow-x-auto rounded-2xl drop-shadow-lg scrollbar-thumb:bg-slate-400'>
         {deviceModel.name === 'nanoPAD2' && (
