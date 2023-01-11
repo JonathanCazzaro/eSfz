@@ -4,10 +4,9 @@ import Navbutton from './Navbutton';
 import {
   HiOutlineDocumentPlus as NewFileIcon,
   HiOutlineFolderOpen as OpenFileIcon,
-  HiOutlineQuestionMarkCircle as HelpIcon,
   HiOutlineCog8Tooth as SettingsIcon,
 } from 'react-icons/hi2';
-import { IoSaveOutline as SaveIcon } from 'react-icons/io5';
+import { IoSaveOutline as SaveIcon, IoLogoGithub as GithubIcon } from 'react-icons/io5';
 import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
 
@@ -54,8 +53,8 @@ const Navbar: React.FC = () => {
         />
         <Navbutton
           className='mt-auto mb-0'
-          Icon={{ Component: HelpIcon, className: 'scale-110' }}
-          label='Aide'
+          Icon={{ Component: GithubIcon, className: 'scale-125' }}
+          label='Voir le projet sur Github'
           onClick={() => window.api.openExternalLink('https://github.com/JonathanCazzaro/eSfz')}
         />
       </ul>

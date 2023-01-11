@@ -1,9 +1,12 @@
+import { Lang } from "./translation";
+
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
 
 export interface AppDataState {
   midiDevice: [WebMidi.MIDIInput | null, StateSetter<WebMidi.MIDIInput | null>];
   midiDeviceModel: [MidiDeviceModel, StateSetter<MidiDeviceModel>];
   audioOutDevice: [AudioOutDevice | null, StateSetter<AudioOutDevice | null>];
+  lang: [Lang, StateSetter<Lang>];
   saveDir: [string, StateSetter<string>];
   importDir: [string, StateSetter<string>];
   settingsOpen: [boolean, StateSetter<boolean>];

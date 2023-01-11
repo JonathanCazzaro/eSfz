@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { createContext, ReactNode, useState } from 'react';
+import { Lang } from './types/translation';
 import {
   AppDataState,
   AttachSamplesProps,
@@ -33,6 +34,8 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const currentTabId = useState<number>(0);
   const [_currentTabId, _setCurrentTabId] = currentTabId;
+
+  const lang = useState<Lang>(localStorage.getItem('lang') as Lang || "en");
 
   const saveDir = useState('');
   const [_saveDir] = saveDir;
@@ -174,6 +177,7 @@ const Store: React.FC<{ children: ReactNode }> = ({ children }) => {
         midiDevice,
         midiDeviceModel,
         audioOutDevice,
+        lang,
         saveDir,
         importDir,
         settingsOpen,

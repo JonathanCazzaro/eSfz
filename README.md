@@ -1,6 +1,6 @@
 # eSfz
 
-eSfz is a desktop app to design SFZ formatted virtual instruments. Plug in your midi controller, and start mapping samples to pads/keys. Simply hit save and you will have your SFZ file ready to be used in any compatible sampler.
+eSfz is a desktop app designed to make SFZ formatted virtual instruments. Plug in your midi controller, and start mapping samples to pads/keys. Simply hit save and you will have your SFZ file ready to be used in any compatible sampler.
 
 **What eSfz is not** ?
 Well, although you can test out your mappings with a basic "play" mode, it is definitely not an SFZ player. A sampler or a DAW even less !
