@@ -127,7 +127,7 @@ export const setHandlers = (window: BrowserWindow) => {
             for (let i = 0; i < sfz.length; i++) {
               await writeFile(`${instrument.path}/${instrument.name}-${instrument.mappings[i].device}.sfz`, sfz[i]);
             }
-          } catch (error) {            
+          } catch (error) {
             response.error = new Error('SFZ file generation failed.');
             return response;
           }
