@@ -12,9 +12,10 @@ interface TextFieldProps {
   setValue: (value: string) => void;
   required?: boolean;
   placeholder?: string;
+  className?: string;
 }
 
-const TextField: React.FC<TextFieldProps> = ({ label, setValue, value, id, required, placeholder }) => {
+const TextField: React.FC<TextFieldProps> = ({ label, setValue, value, id, required, placeholder, className }) => {
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,7 +32,7 @@ const TextField: React.FC<TextFieldProps> = ({ label, setValue, value, id, requi
 
   return (
     <form
-      className='flex flex-col overflow-hidden rounded border border-slate-600 shadow-lg shrink-0'
+      className={`flex flex-col overflow-hidden rounded border border-slate-600 shadow-lg shrink-0 ${className || ''}`}
       onSubmit={handleSubmit}
     >
       <label

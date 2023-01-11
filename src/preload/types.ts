@@ -13,11 +13,17 @@ export interface Sample {
   id: number;
   name: string;
   filename: string;
+  directory?: string;
 }
 
+export type MidiDeviceName = 'nanoPAD2';
+
 export interface Mapping {
-  noteId: number;
-  samplesIds: number[];
+  device: MidiDeviceName;
+  pads: {
+    id: number;
+    samples: number[];
+  }[];
 }
 
 export interface Platform {

@@ -5,10 +5,12 @@ export interface AppDataState {
   midiDeviceModel: [MidiDeviceModel, StateSetter<MidiDeviceModel>];
   audioOutDevice: [AudioOutDevice | null, StateSetter<AudioOutDevice | null>];
   saveDir: [string, StateSetter<string>];
+  importDir: [string, StateSetter<string>];
   settingsOpen: [boolean, StateSetter<boolean>];
   newInstrumentOpen: [boolean, StateSetter<boolean>];
   closeConfirm: [CloseConfirm, StateSetter<CloseConfirm>];
   instruments: [Instrument[], StateSetter<Instrument[]>];
+  pads: [Pad[], StateSetter<Pad[]>];
   currentTabId: [number, StateSetter<number>];
   mode: [Mode, StateSetter<Mode>];
   openInstrument: () => Promise<void>;
@@ -16,6 +18,8 @@ export interface AppDataState {
   updateInstrument: (newVersion: Instrument) => void;
   closeInstrument: (id: number, savedCheck?: boolean) => void;
   importSamples: (instrument: Instrument) => Promise<void>;
+  attachSample: (props: AttachSamplesProps) => void;
+  detachSample: (props: AttachSamplesProps) => void;
 }
 
 export interface AudioOutDevice {
@@ -44,12 +48,22 @@ export interface Instrument {
 export interface Sample {
   id: number;
   name: string;
-  filename: string;  
+  filename: string;
+  signal: HTMLAudioElement;
+}
+
+export interface Pad {
+  id: number;
+  label: string;
+  affectedSamples: number[];  
 }
 
 export interface Mapping {
-  noteId: number;
-  samplesIds: number[];
+  device: MidiDeviceName;
+  pads: {
+    id: number;
+    samples: number[];
+  }[];
 }
 
 export interface CloseConfirm {
@@ -57,4 +71,12 @@ export interface CloseConfirm {
   actionType: 'close' | 'quit' | null;
 }
 
-export type Mode = "edition" | "play";
+export type Mode = 'edition' | 'play';
+export type Axis = 'x' | 'y' | undefined;
+
+export interface AttachSamplesProps {
+  instrument: Instrument;
+  pad: Pad;
+  sampleId: number;
+  deviceName: MidiDeviceName;
+}

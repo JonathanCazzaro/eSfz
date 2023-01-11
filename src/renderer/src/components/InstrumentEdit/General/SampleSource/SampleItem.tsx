@@ -12,9 +12,20 @@ import {
 
 type SampleItemProps = Sample & {
   instrument: Instrument;
+  allowModification: boolean;
+  draggable: boolean;
+  handleDelete: (sampleId: number) => void;
 };
 
-const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument }) => {
+const SampleItem: React.FC<SampleItemProps> = ({
+  id,
+  name,
+  signal,
+  instrument,
+  allowModification,
+  draggable,
+  handleDelete,
+}) => {
   const { updateInstrument } = useContext(AppData) as AppDataState;
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(name);
@@ -37,25 +48,41 @@ const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument 
     });
   };
 
-  const handleDeleteSample = async (sampleId: number) => {
-    updateInstrument({
-      ...instrument,
-      samples: instrument.samples.filter(({ id }) => id !== sampleId),
-      saved: false,
-    });
-  };
+  // const handleRemoveSample = async (sampleId: number) => {
+  //   if (allowModification) {
+  //     updateInstrument({
+  //       ...instrument,
+  //       samples: instrument.samples.filter(({ id }) => id !== sampleId),
+  //       saved: false,
+  //     });
+  //   } else if (midiDeviceModel[0].name) {
+  //     detachSample({
+  //       deviceName: midiDeviceModel[0].name,
+  //       instrument,
+  //       pad
+  //     })
+  //   }
+  // };
 
   useEffect(() => {
     setTempValue(name);
   }, [name]);
 
   return (
-    <li className='rounded-m  px-4 py-0.5 text-slate-300 odd:bg-slate-800 odd:bg-opacity-50'>
+    <li
+      className={`rounded-md px-4  py-0.5 text-slate-300 odd:bg-slate-800 odd:bg-opacity-50  ${
+        draggable ? 'cursor-move border border-solid border-transparent hover:border-slate-300' : ''
+      }`}
+      draggable={draggable}
+      onDragStart={(e) => {
+        e.dataTransfer.setData('text/plain', id.toString());
+      }}
+    >
       <form className='flex items-center gap-2' onSubmit={handleSubmit}>
         <button
           className='hover:text-green-500'
           type='button'
-          onClick={() => audioPlayer.play(`${instrument.path}/samples/${filename}`)}
+          onClick={() => audioPlayer.play(signal)}
         >
           <PlayIcon />
         </button>
@@ -67,8 +94,8 @@ const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument 
           required
           value={tempValue}
           className={`w-full px-2 outline-none ${
-            editing ? 'rounded-lg bg-slate-100 bg-opacity-10' : ' bg-transparent'
-          }`}
+            editing ? 'rounded-lg bg-slate-100 bg-opacity-10' : 'bg-transparent'
+          } ${draggable && !editing ? 'pointer-events-none cursor-move' : ''}`}
         />
         <div className='mr-0 ml-auto flex items-center gap-2'>
           {editing ? (
@@ -89,22 +116,20 @@ const SampleItem: React.FC<SampleItemProps> = ({ id, name, filename, instrument 
             </>
           ) : (
             <>
-              <button
-                className='hover:brightness-150'
-                type='button'
-                onClick={(e) => {
-                  e.preventDefault();
-                  setEditing(!editing);
-                  inputRef.current?.focus();
-                }}
-              >
-                <EditIcon />
-              </button>
-              <button
-                className='hover:text-red-500'
-                type='button'
-                onClick={() => handleDeleteSample(id)}
-              >
+              {allowModification && (
+                <button
+                  className='hover:brightness-150'
+                  type='button'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setEditing(!editing);
+                    inputRef.current?.focus();
+                  }}
+                >
+                  <EditIcon />
+                </button>
+              )}
+              <button className='hover:text-red-500' type='button' onClick={() => handleDelete(id)}>
                 <DeleteIcon />
               </button>
             </>

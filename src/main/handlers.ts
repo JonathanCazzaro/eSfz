@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
 import { mkdir, readdir, readFile, writeFile, copyFile, rm } from 'fs/promises';
 import { ApiResponse, Instrument, Sample } from '../preload/types';
 import { generateId } from './utils/utils';
 import path from 'path';
+import makeSfz from './utils/makeSfz';
 
 interface Handler {
   event: string;
@@ -57,6 +59,7 @@ export const setHandlers = (window: BrowserWindow) => {
               id: generateId(8),
               filename: filePath,
               name: path.parse(filePath.split('/').at(-1) as string).name || '',
+              directory: path.parse(filePath).dir,
             }));
 
             for (const sample of response.data) {
@@ -106,21 +109,27 @@ export const setHandlers = (window: BrowserWindow) => {
           error: null,
         };
         try {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const [{ saved, currentMapping, ...instrument }] = props;
           await writeFile(`${instrument.path}/${instrument.id}.esfz`, JSON.stringify(instrument), {
             encoding: 'utf-8',
           });
           try {
             const sampleFiles = await readdir(`${instrument.path}/samples`);
-            const unusedSamples = sampleFiles.filter(
-              (file) => !instrument.samples.map(({ filename }) => filename).includes(file),
-            );
+            const unusedSamples = sampleFiles.filter((file) => !instrument.samples.map(({ filename }) => filename).includes(file));
             for (const sample of unusedSamples) {
               await rm(`${instrument.path}/samples/${sample}`, { force: true });
             }
           } catch (error) {
             await mkdir(`${instrument.path}/samples`);
+          }
+          try {
+            const sfz = makeSfz(instrument);
+            for (let i = 0; i < sfz.length; i++) {
+              await writeFile(`${instrument.path}/${instrument.name}-${instrument.mappings[i].device}.sfz`, sfz[i]);
+            }
+          } catch (error) {
+            response.error = new Error('SFZ file generation failed.');
+            return response;
           }
           response.data = instrument.id;
           return response;
@@ -163,10 +172,7 @@ export const setHandlers = (window: BrowserWindow) => {
                   response.error = new Error('Service failed.');
                   return response;
                 }
-              } else
-                response.error = new Error(
-                  'Instrument directory should not contain more than one .esfz file.',
-                );
+              } else response.error = new Error('Instrument directory should not contain more than one .esfz file.');
               return response;
             } catch (error) {
               response.error = new Error('Service failed.');
@@ -182,10 +188,7 @@ export const setHandlers = (window: BrowserWindow) => {
 
     {
       event: 'clean:instruments',
-      callback: async (
-        _event,
-        props: [{ path: string; id: number }[]],
-      ): Promise<ApiResponse<undefined>> => {
+      callback: async (_event, props: [{ path: string; id: number }[]]): Promise<ApiResponse<undefined>> => {
         const response: ApiResponse<undefined> = {
           data: undefined,
           error: null,
@@ -197,9 +200,7 @@ export const setHandlers = (window: BrowserWindow) => {
             });
             const parsedConfig = JSON.parse(configFile) as Instrument;
             const sampleFiles = await readdir(`${instrument.path}/samples`);
-            const unusedSamples = sampleFiles.filter(
-              (file) => !parsedConfig.samples.map(({ filename }) => filename).includes(file),
-            );
+            const unusedSamples = sampleFiles.filter((file) => !parsedConfig.samples.map(({ filename }) => filename).includes(file));
             for (const sample of unusedSamples) {
               await rm(`${instrument.path}/samples/${sample}`, { force: true });
             }

@@ -11,7 +11,7 @@ const createWindow = (): BrowserWindow => {
     minHeight: 660,
     show: false,
     frame: process.platform === 'darwin' ? true : false,
-    transparent: true,
+    transparent: true,    
     title: 'eSfz',
     icon: process.platform === 'linux' ? path.join(__dirname, '../../build/icon.png') : undefined,
     webPreferences: {

@@ -2,6 +2,7 @@ import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
 import { useContext, useEffect } from 'react';
 import { useMidiDevice } from './useMidiDevice';
+import nanopad2 from '../devices_json/nanopad2.json';
 
 export const useInit = () => {
   const {
@@ -9,30 +10,36 @@ export const useInit = () => {
     midiDeviceModel: [, setMidiDeviceModel],
     audioOutDevice: [, setAudioOutDevice],
     saveDir: [, setSaveDir],
+    importDir: [, setImportDir],
+    pads: [, setPads],
   } = useContext(AppData) as AppDataState;
   const { getDevices } = useMidiDevice(null);
 
   useEffect(() => {
     const config = {
-      midiDeviceId: localStorage.getItem('midi_device_id'),
+      midiDeviceName: localStorage.getItem('midi_device_name'),
       audioOutDeviceId: localStorage.getItem('audio_out_device_id'),
       saveDir: localStorage.getItem('save_dir'),
     };
 
-    if (config.saveDir) setSaveDir(config.saveDir);
-    else {
+    if (config.saveDir) {
+      setSaveDir(config.saveDir);
+      setImportDir(config.saveDir);
+    } else {
       const { env } = window.electron.process;
       localStorage.setItem('save_dir', env.HOME as string);
       setSaveDir(env.HOME as string);
+      setImportDir(env.HOME as string);
     }
 
-    if (config.midiDeviceId) {
+    if (config.midiDeviceName) {
       getDevices().then((devices) => {
-        const foundDevice = devices?.find((input) => input.id === config.midiDeviceId);
+        const foundDevice = devices?.find(({ name }) => name === config.midiDeviceName);
         if (foundDevice) {
           setMidiDevice(foundDevice);
-          if (foundDevice.name?.includes('nanoPAD2')) {
+          if (config.midiDeviceName?.includes('nanoPAD2')) {
             setMidiDeviceModel({ name: 'nanoPAD2', noteRange: [36, 51] });
+            setPads(nanopad2.pads.map((pad) => ({ ...pad, affectedSamples: [] })));
           }
         }
       });
