@@ -1,0 +1,81 @@
+{
+  "buttons": {
+    "createInstrument": ["Créer un instrument"],
+    "openInstrument": ["Ouvrir un instrument"],
+    "saveInstrument": ["Sauvegarder l'instrument courant"],
+    "saveAll": ["Sauvegarder tous les instruments"],
+    "openSettings": ["Paramètres"],
+    "openGithub": ["Visiter la page Github"],
+    "validate": ["Valider"],
+    "cancel": ["Annuler"],
+    "open": ["Ouvrir"],
+    "select": ["Sélectionner"],
+    "closeWindow": ["Fermer la fenêtre"],
+    "showSettings": ["Afficher le volet configuration"],
+    "hideSettings": ["Cacher le volet configuration"],
+    "saveAndQuit": ["Sauvegarder et quitter"],
+    "saveAndClose": ["Sauvegarder et fermer"],
+    "saveAllAndQuit": ["Tout sauvegarder et quitter"],
+    "saveAllAndClose": ["Tout sauvegarder et fermer"],
+    "quitWithoutSaving": ["Quitter sans sauvegarder"],
+    "closeWithoutSaving": ["Fermer sans sauvegarder"],
+    "welcomeTab": ["Bienvenue"]
+  },
+  "sliders": {
+    "mode_edit": ["Edition"],
+    "mode_play": ["Jeu"],
+    "mode_label": ["Choix du mode"],
+    "state_active": ["Activé"],
+    "state_disabled": ["Désactivé"],
+    "state_label": ["Etat du contrôleur"]
+  },
+  "sections": {
+    "welcome_gettingStarted": ["Par quoi commence-t-on ?"],
+    "settings_general": ["Général"],
+    "settings_midiInput": ["Entrée midi"],
+    "settings_audioOut": ["Sortie audio principale"],
+    "edit_instrument": ["Nom de l'instrument"],
+    "edit_author": ["Auteur"],
+    "edit_samples": ["Samples disponibles"],
+    "edit_pad": ["Edition de la touche"],
+    "edit_pad_samples": ["Samples associés"]
+  },
+  "inputs": {
+    "defaultDirectory_label": ["Répertoire d'enregistrement par défaut"],
+    "version_label": ["Langue"],
+    "version_values": ["English", "Français"],
+    "instrument_label": ["Nom"],
+    "author_label": ["Auteur"],
+    "directory_label": ["Répertoire de travail"],
+    "autosave_label": ["Sauvegarde automatique toutes les", "minutes"],
+    "defaultdevice_label": ["Périphérique par défault"],
+    "unidentified_label": ["Périphérique non identifié"],
+    "nodevice_label": ["Aucun périphérique détecté"],
+    "midi_label": ["Sélectionnez un périphérique"]
+  },
+  "headers": {
+    "newInstrument": ["Nouvel instrument"],
+    "selectInstrument": ["Sélectionnez l'emplacement de l'instrument"],
+    "selectFolder": ["Sélectionnez un dossier"],
+    "selectSamples": ["Sélectionnez des fichiers audio"],
+    "settings": ["Paramètres"]
+  },
+  "textContent": {
+    "welcome": [
+      "Bienvenue sur eSfz, l'application intuitive pour générer ses propres instruments virtuels au format SFZ. Vous avez un controlleur midi, des samples, et un logiciel MAO ? Alors vous avez tout ce qu'il faut 😃",
+      "Pour en savoir plus sur le format SFZ, rendez-vous sur",
+      "Quant à ceux qui se demandent pourquoi cet oiseau... pourquoi pas ?"
+    ],
+    "noDeviceWarning": [
+      "Aucun périphérique MIDI ne semble être raccordé ou configuré.",
+      "Vérifiez vos branchements et rendez vous dans le menu des paramètres."
+    ],
+    "unsupportedDeviceWarning": ["Votre périphérique MIDI n'est pas compatible.", "Une demande peut être faite à l'équipe afin de l'intégrer prochainement."],
+    "unsavedInstrumentsWarning": [
+      "Attention, un instrument comporte des modifications non sauvegardées.",
+      "Attention, plusieurs instruments comportent des modifications non sauvegardées."
+    ],
+    "noAvailableSamples": ["Aucun sample n'a encore été ajouté à ce instrument.", "Aucun sample n'a encore été attaché à cette touche."],
+    "unreachableDevicesWarning": ["Les périphériques audio sont inaccessibles !"]
+  }
+}

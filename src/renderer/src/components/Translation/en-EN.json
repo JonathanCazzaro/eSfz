@@ -1,0 +1,75 @@
+{
+  "buttons": {
+    "createInstrument": ["Create new instrument"],
+    "openInstrument": ["Open instrument"],
+    "saveInstrument": ["Save current instrument"],
+    "saveAll": ["Save all instruments"],
+    "openSettings": ["Settings"],
+    "openGithub": ["Visit the Github page"],
+    "validate": ["Validate"],
+    "cancel": ["Cancel"],
+    "open": ["Open"],
+    "select": ["Select"],
+    "closeWindow": ["Close window"],
+    "showSettings": ["Show the setup section"],
+    "hideSettings": ["Hide the setup section"],
+    "saveAndQuit": ["Save and quit"],
+    "saveAndClose": ["Save and close"],
+    "saveAllAndQuit": ["Save all and quit"],
+    "saveAllAndClose": ["Save all and close"],
+    "quitWithoutSaving": ["Quit without saving"],
+    "closeWithoutSaving": ["Close without saving"],
+    "welcomeTab": ["Welcome"]
+  },
+  "sliders": {
+    "mode_edit": ["Edit"],
+    "mode_play": ["Play"],
+    "mode_label": ["Current mode"],
+    "state_active": ["Active"],
+    "state_disabled": ["Inactive"],
+    "state_label": ["Controller state"]
+  },
+  "sections": {
+    "welcome_gettingStarted": ["What should we start with ?"],
+    "settings_general": ["General"],
+    "settings_midiInput": ["Midi input"],
+    "settings_audioOut": ["Main audio output"],
+    "edit_instrument": ["Instrument name"],
+    "edit_author": ["Author"],
+    "edit_samples": ["Available samples"],
+    "edit_pad": ["Editing key"],
+    "edit_pad_samples": ["Associated samples"]
+  },
+  "inputs": {
+    "defaultDirectory_label": ["Default saving folder"],
+    "version_label": ["Language"],
+    "version_values": ["English", "Français"],
+    "instrument_label": ["Name"],
+    "author_label": ["Author"],
+    "directory_label": ["Directory"],
+    "autosave_label": ["Autosave every", "minutes"],
+    "defaultdevice_label": ["Default device"],
+    "unidentified_label": ["Unidentified device"],
+    "nodevice_label": ["No device found"],
+    "midi_label": ["Select a device"]
+  },
+  "headers": {
+    "newInstrument": ["New instrument"],
+    "selectInstrument": ["Pick the instrument location"],
+    "selectFolder": ["Pick a folder"],
+    "selectSamples": ["Select audio files"],
+    "settings": ["Settings"]
+  },
+  "textContent": {
+    "welcome": [
+      "Welcome on eSfz, the intuitive app to make your own SFZ virtual instruments. You got samples, a midi controller and a computer music software ? Then you're ready to go 😃",
+      "To learn more about the SFZ format, visit",
+      "For those wondering why the bird... Well, why not ?"
+    ],
+    "noDeviceWarning": ["No midi device has been recognized.", "Check your wirings and go to the settings panel."],
+    "unsupportedDeviceWarning": ["Your midi device is not supported at the moment.", "You may put a request to the team to fix that in the near future."],
+    "unsavedInstrumentsWarning": ["Caution, one instrument includes unsaved modifications.", "Caution, several instruments include unsaved modifications."],
+    "noAvailableSamples": ["No samples have been added yet to this instrument.", "No samples have been added yet to this key."],
+    "unreachableDevicesWarning": ["Couldn't reach audio devices !"]
+  }
+}

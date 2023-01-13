@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { HiOutlineExclamationTriangle as ErrorIcon } from 'react-icons/hi2';
 import Selector from '../Selector/Selector';
 import nanopad2 from '../../devices_json/nanopad2.json';
+import { TranslationData } from '../Translation/Translation';
 
 const MidiDeviceSelector: React.FC = () => {
   const {
@@ -12,6 +13,8 @@ const MidiDeviceSelector: React.FC = () => {
     midiDeviceModel: [, setMidiDeviceModel],
     pads: [, setPads]
   } = useContext(AppData) as AppDataState;
+  const { inputs } = useContext(TranslationData);
+
   const [availableDevices, setAvailableDevices] = useState<WebMidi.MIDIInput[]>([]);
   const [deviceList, setDeviceList] = useState<WebMidi.MIDIInput[]>([]);
   const { getDevices, error } = useMidiDevice(device);
@@ -31,7 +34,7 @@ const MidiDeviceSelector: React.FC = () => {
     </p>
   ) : (
     <Selector
-      selectedOption={device?.name || 'Veuillez sélectionner une entrée'}
+      selectedOption={device?.name || inputs.midi_label[0]}
       onRefresh={async () => {
         const devices = await getDevices();
         setAvailableDevices(devices || []);
@@ -51,12 +54,12 @@ const MidiDeviceSelector: React.FC = () => {
               }}
               className='w-full px-4 py-1 text-left hover:bg-slate-200'
             >
-              {currentDevice?.name || 'Périphérique non identifié'}
+              {currentDevice?.name || inputs.unidentified_label[0]}
             </button>
           </li>
         ))
       ) : (
-        <li className='text-center italic text-slate-500'>Pas d'autre périphérique détecté</li>
+        <li className='text-center italic text-slate-500'>{inputs.nodevice_label[0]}</li>
       )}
     </Selector>
   );

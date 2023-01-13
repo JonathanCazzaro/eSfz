@@ -23,7 +23,8 @@
     "@electron-toolkit/preload": "^1.0.2",
     "@electron-toolkit/utils": "^1.0.2",
     "electron-updater": "^4.6.5",
-    "react-icons": "^4.6.0"
+    "react-icons": "^4.6.0",
+    "react-intl-universal": "^2.6.11"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

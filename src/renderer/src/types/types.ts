@@ -1,9 +1,12 @@
+import { Lang } from "./translation";
+
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
 
 export interface AppDataState {
   midiDevice: [WebMidi.MIDIInput | null, StateSetter<WebMidi.MIDIInput | null>];
   midiDeviceModel: [MidiDeviceModel, StateSetter<MidiDeviceModel>];
   audioOutDevice: [AudioOutDevice | null, StateSetter<AudioOutDevice | null>];
+  lang: [Lang, StateSetter<Lang>];
   saveDir: [string, StateSetter<string>];
   importDir: [string, StateSetter<string>];
   settingsOpen: [boolean, StateSetter<boolean>];
@@ -13,11 +16,11 @@ export interface AppDataState {
   pads: [Pad[], StateSetter<Pad[]>];
   currentTabId: [number, StateSetter<number>];
   mode: [Mode, StateSetter<Mode>];
-  openInstrument: () => Promise<void>;
+  openInstrument: (props: { dialogTitle: string; buttonLabel: string }) => Promise<void>;
   saveInstruments: (ids: number[]) => Promise<void>;
   updateInstrument: (newVersion: Instrument) => void;
   closeInstrument: (id: number, savedCheck?: boolean) => void;
-  importSamples: (instrument: Instrument) => Promise<void>;
+  importSamples: (props: { instrument: Instrument; dialogTitle: string; buttonLabel: string }) => Promise<void>;
   attachSample: (props: AttachSamplesProps) => void;
   detachSample: (props: AttachSamplesProps) => void;
 }

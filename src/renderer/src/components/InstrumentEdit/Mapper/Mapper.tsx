@@ -7,6 +7,7 @@ import NanoPad2_Layout from './NanoPad2/NanoPad2_Layout';
 import NoteSetup from './NoteSetup';
 import { TbArrowBarToLeft as LeftIcon, TbArrowBarRight as RightIcon } from 'react-icons/tb';
 import { audioPlayer } from '@renderer/utils/audio';
+import { TranslationData } from '@renderer/components/Translation/Translation';
 
 interface MapperProps {
   device: WebMidi.MIDIInput;
@@ -31,6 +32,7 @@ const Mapper: React.FC<MapperProps> = ({
     pads: [pads],
     midiDeviceModel: [midiDeviceModel],
   } = useContext(AppData) as AppDataState;
+  const { buttons, sliders } = useContext(TranslationData);
 
   const [noteId, setNoteId] = useState<number>();
   const [playing, setPlaying] = useState(false);
@@ -87,13 +89,13 @@ const Mapper: React.FC<MapperProps> = ({
     <div className='relative flex h-full w-full flex-col justify-center gap-6 overflow-hidden rounded bg-white bg-opacity-25 p-6 text-lg text-neutral-300'>
       <button onClick={setConfigSection} className='tertiary-button'>
         {isConfigVisible ? <LeftIcon className='scale-125' /> : <RightIcon className='scale-125' />}
-        {isConfigVisible ? 'Cacher' : 'Afficher'} le volet configuration
+        {isConfigVisible ? buttons.hideSettings[0] : buttons.showSettings[0]}
       </button>
       <div className='flex h-full w-full gap-6'>
         <div className='mt-8 flex h-full w-fit shrink-0 flex-col gap-4'>
           <div className='flex items-center justify-between'>
             <label htmlFor='mode' className='text-slate-100'>
-              Choix du mode
+              {sliders.mode_label[0]}
             </label>
             <div className={`switch ${mode === 'edition' ? 'bg-emerald-800' : 'bg-slate-700'} `}>
               <input
@@ -112,14 +114,14 @@ const Mapper: React.FC<MapperProps> = ({
                 }}
               />
               <div className='flex w-full justify-between text-center text-sm font-semibold uppercase'>
-                <span className='w-1/2'>édition</span>
-                <span className='w-1/2'>jeu</span>
+                <span className='w-1/2'>{sliders.mode_edit[0]}</span>
+                <span className='w-1/2'>{sliders.mode_play[0]}</span>
               </div>
             </div>
           </div>
           <div className='flex items-center gap-8'>
             <label htmlFor='device-state' className='text-slate-100'>
-              Etat du contrôleur
+              {sliders.state_label}
             </label>
             <div className={`switch w-44 ${isDeviceOpen ? 'bg-emerald-800' : 'bg-neutral-700'} `}>
               <input
@@ -133,8 +135,8 @@ const Mapper: React.FC<MapperProps> = ({
                 }}
               />
               <div className='flex w-full justify-between text-center text-sm font-semibold uppercase'>
-                <span className='w-1/2'>activé</span>
-                <span className='w-1/2'>désactivé</span>
+                <span className='w-1/2'>{sliders.state_active}</span>
+                <span className='w-1/2'>{sliders.state_disabled}</span>
               </div>
             </div>
           </div>

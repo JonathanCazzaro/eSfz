@@ -3,13 +3,14 @@ import { AppDataState, AudioOutDevice } from '@renderer/types/types';
 import React, { useContext, useEffect, useState } from 'react';
 import { HiOutlineExclamationTriangle as ErrorIcon } from 'react-icons/hi2';
 import Selector from '../Selector/Selector';
-
-// -------------- Pour jouer les sons sur le pérophérique sélectionné, on utilisera la méthode setSinkId de chaque object audio en lui passant le param id du périphérique --------------------
+import { TranslationData } from '../Translation/Translation';
 
 const AudioDeviceSelector: React.FC = () => {
   const {
     audioOutDevice: [device, setDevice],
   } = useContext(AppData) as AppDataState;
+  const { inputs, textContent } = useContext(TranslationData);
+
   const [error, setError] = useState('');
   const [availableDevices, setAvailableDevices] = useState<AudioOutDevice[]>([]);
   const [deviceList, setDeviceList] = useState<AudioOutDevice[]>([]);
@@ -22,11 +23,11 @@ const AudioDeviceSelector: React.FC = () => {
           .filter(({ kind }) => kind === 'audiooutput')
           .map(({ deviceId, label }) => ({
             id: deviceId,
-            name: deviceId === 'default' ? 'Périphérique par défault' : label,
+            name: deviceId === 'default' ? inputs.defaultdevice_label[0] : label,
           })),
       );
     } catch (error) {
-      setError('Les périphériques audio sont inaccessibles !');
+      setError(textContent.unreachableDevicesWarning[0]);
     }
   };
 
@@ -55,12 +56,12 @@ const AudioDeviceSelector: React.FC = () => {
               }}
               className='hover:bg-slate-200 w-full text-left px-4 py-1'
             >
-              {currentDevice?.name || 'Périphérique non identifié'}
+              {currentDevice?.name || inputs.unidentified_label[0]}
             </button>
           </li>
         ))
       ) : (
-        <li className='text-center italic text-slate-500'>Pas d'autre périphérique détecté</li>
+        <li className='text-center italic text-slate-500'>{inputs.nodevice_label[0]}</li>
       )}
     </Selector>
   );

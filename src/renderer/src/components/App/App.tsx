@@ -6,8 +6,10 @@ import Navbar from '../Navbar/Navbar';
 import Settings from '../Settings/Settings';
 import NewInstrument from '../Dialogs/NewInstrument/NewInstrument';
 import CloseConfirm from '../Dialogs/CloseConfirm/CloseConfirm';
+import { useInit } from '@renderer/hooks/useInit';
 
 const App: React.FC = () => {
+  useInit();
   const {
     settingsOpen: [settingsOpen, setSettingsOpen],
     newInstrumentOpen: [newInstrumentOpen, setNewInstrumentOpen],

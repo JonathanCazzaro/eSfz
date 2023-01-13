@@ -16,18 +16,18 @@ export const setHandlers = (window: BrowserWindow) => {
   const handlers: Handler[] = [
     {
       event: 'dialog:pickDirectory',
-      callback: async (_event, props: [string]): Promise<ApiResponse<string>> => {
+      callback: async (_event, props: [{ defaultPath: string; dialogTitle: string; buttonLabel: string }]): Promise<ApiResponse<string>> => {
         const response: ApiResponse<string> = {
           data: null,
           error: null,
         };
         try {
-          const [path] = props;
+          const [{ defaultPath, dialogTitle, buttonLabel }] = props;
           const { canceled, filePaths } = await dialog.showOpenDialog(window, {
             properties: ['openDirectory', 'createDirectory'],
-            title: 'Sélectionner un dossier',
-            buttonLabel: 'Sélectionner',
-            defaultPath: path,
+            title: dialogTitle,
+            buttonLabel,
+            defaultPath,
           });
           if (!canceled) response.data = filePaths[0];
           return response;
@@ -40,18 +40,21 @@ export const setHandlers = (window: BrowserWindow) => {
 
     {
       event: 'dialog:importSamples',
-      callback: async (_event, props: [string, string]): Promise<ApiResponse<Sample[]>> => {
+      callback: async (
+        _event,
+        props: [{ defaultPath: string; copyPath: string; dialogTitle: string; buttonLabel: string }],
+      ): Promise<ApiResponse<Sample[]>> => {
         const response: ApiResponse<Sample[]> = {
           data: null,
           error: null,
         };
         try {
-          const [defaultPath, copyPath] = props;
+          const [{ defaultPath, copyPath, dialogTitle, buttonLabel }] = props;
           const { canceled, filePaths } = await dialog.showOpenDialog(window, {
             properties: ['openFile', 'multiSelections'],
-            title: 'Sélectionner des fichiers audio',
-            buttonLabel: 'Sélectionner',
-            defaultPath: defaultPath,
+            title: dialogTitle,
+            buttonLabel,
+            defaultPath,
             filters: [{ name: 'Fichiers audio', extensions: ['wav'] }],
           });
           if (!canceled) {
@@ -142,18 +145,18 @@ export const setHandlers = (window: BrowserWindow) => {
 
     {
       event: 'read:instrument',
-      callback: async (_event, props: [string]): Promise<ApiResponse<Instrument>> => {
+      callback: async (_event, props: [{ defaultPath: string; dialogTitle: string; buttonLabel: string }]): Promise<ApiResponse<Instrument>> => {
         const response: ApiResponse<Instrument> = {
           data: null,
           error: null,
         };
         try {
-          const [pathName] = props;
+          const [{ defaultPath, buttonLabel, dialogTitle }] = props;
           const { canceled, filePaths } = await dialog.showOpenDialog(window, {
             properties: ['openDirectory'],
-            title: "Sélectionnez l'emplacement de l'instrument",
-            buttonLabel: 'Ouvrir',
-            defaultPath: pathName,
+            title: dialogTitle,
+            buttonLabel,
+            defaultPath,
           });
           if (!canceled) {
             try {
