@@ -7,6 +7,7 @@ import {
   MdOutlineClose as CloseIcon,
   MdMinimize as MinimizeIcon,
 } from 'react-icons/md';
+import { TranslationData } from '../Translation/Translation';
 
 const TabBar: React.FC = () => {
   const {
@@ -16,6 +17,7 @@ const TabBar: React.FC = () => {
     closeConfirm: [, setCloseConfirm],
     closeInstrument,
   } = useContext(AppData) as AppDataState;
+  const { buttons } = useContext(TranslationData);
 
   const handleQuit = () => {
     const unsavedInstruments = instruments.filter(({ saved }) => !saved);
@@ -31,7 +33,7 @@ const TabBar: React.FC = () => {
         className={`welcome-tab-button ${currentTabId ? 'border-b-slate-800 brightness-90' : ''}`}
         onClick={() => setCurrentTabId(0)}
       >
-        Bienvenue
+        {buttons.welcomeTab[0]}
       </button>
       {instruments.map((instrument) => (
         <div

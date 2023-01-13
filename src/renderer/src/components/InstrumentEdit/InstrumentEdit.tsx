@@ -6,6 +6,7 @@ import TextField from './General/TextField';
 import Mapper from './Mapper/Mapper';
 import { IoWarning as WarningIcon } from 'react-icons/io5';
 import { useMidiDevice } from '@renderer/hooks/useMidiDevice';
+import { TranslationData } from '../Translation/Translation';
 
 interface InstrumentEditProps {
   instrument: Instrument;
@@ -17,6 +18,8 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
     midiDevice: [midiDevice],
     midiDeviceModel: [midiDeviceModel],
   } = useContext(AppData) as AppDataState;
+  const { textContent, sections } = useContext(TranslationData);
+
   const { author, name } = instrument;
   const [isLeftSectionVisible, setIsLeftSectionVisible] = useState(true);
   const [open, setOpen] = useState(true);
@@ -37,7 +40,7 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
         <TextField
           className='w-80'
           id='name'
-          label="Nom de l'instrument"
+          label={sections.edit_instrument[0]}
           value={name}
           setValue={(name) => updateInstrument({ ...instrument, name, saved: false })}
           required
@@ -45,17 +48,17 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
         <TextField
           className='w-80'
           id='author'
-          label='Auteur'
+          label={sections.edit_author[0]}
           value={author}
           setValue={(author) => updateInstrument({ ...instrument, author, saved: false })}
           placeholder='Jimmy Page...'
         />
         <SampleSource
-          label='Samples disponibles'
+          label={sections.edit_samples[0]}
           className='w-80'
           instrument={instrument}
           enableImport
-          noDataMessage="Aucun sample n'est rattaché à cet instrument."
+          noDataMessage={textContent.noAvailableSamples[0]}
           draggable={true}
           handleDelete={(sampleId) => {
             updateInstrument({
@@ -80,9 +83,9 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
           <div className='flex w-full items-center justify-center'>
             <p className='h-fit w-fit rounded-lg bg-yellow-400 bg-opacity-75 p-6 text-center'>
               <WarningIcon className='mx-auto mb-2 text-6xl' />
-              Votre périphérique MIDI n'est pas compatible.
+              {textContent.unsupportedDeviceWarning[0]}
               <br />
-              Une demande peut être faite à l'équipe afin de l'intégrer prochainement.
+              {textContent.unsupportedDeviceWarning[1]}
             </p>
           </div>
         )
@@ -90,9 +93,9 @@ const InstrumentEdit: React.FC<InstrumentEditProps> = ({ instrument, updateInstr
         <div className='flex w-full items-center justify-center'>
           <p className='h-fit w-fit rounded-lg bg-yellow-400 bg-opacity-75 p-6 text-center'>
             <WarningIcon className='mx-auto mb-2 text-6xl' />
-            Aucun périphérique MIDI ne semble être raccordé ou configuré.
+            {textContent.noDeviceWarning[0]}
             <br />
-            Vérifiez vos branchements et rendez vous dans le menu des paramètres.
+            {textContent.noDeviceWarning[1]}
           </p>
         </div>
       )}

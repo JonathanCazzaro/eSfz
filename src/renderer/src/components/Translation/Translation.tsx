@@ -10,7 +10,7 @@ const version: { fr: TranslationInterface; en: TranslationInterface } = {
   en: en_EN,
 };
 
-export const TranslationData = createContext<TranslationInterface | null>(null);
+export const TranslationData = createContext<TranslationInterface>(version.en);
 
 const Translation: React.FC<{ children: ReactNode }> = ({ children }) => {
   const {

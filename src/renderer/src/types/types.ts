@@ -16,11 +16,11 @@ export interface AppDataState {
   pads: [Pad[], StateSetter<Pad[]>];
   currentTabId: [number, StateSetter<number>];
   mode: [Mode, StateSetter<Mode>];
-  openInstrument: () => Promise<void>;
+  openInstrument: (props: { dialogTitle: string; buttonLabel: string }) => Promise<void>;
   saveInstruments: (ids: number[]) => Promise<void>;
   updateInstrument: (newVersion: Instrument) => void;
   closeInstrument: (id: number, savedCheck?: boolean) => void;
-  importSamples: (instrument: Instrument) => Promise<void>;
+  importSamples: (props: { instrument: Instrument; dialogTitle: string; buttonLabel: string }) => Promise<void>;
   attachSample: (props: AttachSamplesProps) => void;
   detachSample: (props: AttachSamplesProps) => void;
 }

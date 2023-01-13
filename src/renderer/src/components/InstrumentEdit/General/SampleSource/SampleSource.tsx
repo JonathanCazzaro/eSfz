@@ -1,3 +1,4 @@
+import { TranslationData } from '@renderer/components/Translation/Translation';
 import { AppData } from '@renderer/store';
 import { AppDataState, Instrument } from '@renderer/types/types';
 import React, { useContext, useRef } from 'react';
@@ -28,6 +29,8 @@ const SampleSource: React.FC<SampleSourceProps> = ({
   handleDelete
 }) => {
   const { importSamples } = useContext(AppData) as AppDataState;
+  const { headers, buttons } = useContext(TranslationData);
+
   const componentRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -53,7 +56,7 @@ const SampleSource: React.FC<SampleSourceProps> = ({
       <div className='flex items-center justify-between bg-gradient-to-t from-slate-800 to-slate-700 py-0.5 px-6 text-lg text-slate-300'>
         {label}
         {enableImport && (
-          <button onClick={async () => importSamples(instrument)}>
+          <button onClick={async () => importSamples({ instrument, buttonLabel: buttons.select[0], dialogTitle: headers.selectSamples[0] })}>
             <SampleSourceIcon className='hover:brightness-150' />
           </button>
         )}
@@ -67,7 +70,7 @@ const SampleSource: React.FC<SampleSourceProps> = ({
               : instrument.samples
           }
           enableImport={enableImport}
-          importSamples={importSamples}
+          importSamples={(instrument) => importSamples({ instrument, buttonLabel: buttons.select[0], dialogTitle: headers.selectSamples[0] })}
           noDataMessage={noDataMessage}
           draggable={draggable}
           handleDelete={handleDelete}

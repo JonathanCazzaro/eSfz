@@ -3,6 +3,7 @@ import { RiErrorWarningFill as WarningIcon } from 'react-icons/ri';
 import React, { useContext } from 'react';
 import { AppData } from '@renderer/store';
 import { AppDataState } from '@renderer/types/types';
+import { TranslationData } from '@renderer/components/Translation/Translation';
 
 interface CloseConfirmProps {
   actionType: 'close' | 'quit' | null;
@@ -16,6 +17,7 @@ const CloseConfirm: React.FC<CloseConfirmProps> = ({ instrumentIds, resetIds, ac
     saveInstruments,
     instruments: [instruments],
   } = useContext(AppData) as AppDataState;
+  const { textContent, buttons } = useContext(TranslationData);
 
   const handleClose = () => {
     closeInstrument(instrumentIds[0], false);
@@ -29,11 +31,7 @@ const CloseConfirm: React.FC<CloseConfirmProps> = ({ instrumentIds, resetIds, ac
   const handleSaveAndCloseOrQuit = async (save: boolean) => {
     if (save) await saveInstruments(instrumentIds);
     else {
-      await window.api.cleanInstruments(
-        instruments
-          .filter(({ id }) => instrumentIds.includes(id))
-          .map(({ id, path }) => ({ id, path })),
-      );
+      await window.api.cleanInstruments(instruments.filter(({ id }) => instrumentIds.includes(id)).map(({ id, path }) => ({ id, path })));
     }
     if (actionType === 'close') handleClose();
     else handleQuit();
@@ -44,23 +42,23 @@ const CloseConfirm: React.FC<CloseConfirmProps> = ({ instrumentIds, resetIds, ac
       <div className='w-fit p-6'>
         <p className='inline-flex flex-nowrap items-center gap-4'>
           <WarningIcon className='scale-150 rounded-full bg-gray-800 text-yellow-400' />
-          {`Attention, ${
-            instrumentIds.length === 1
-              ? 'un instrument comporte'
-              : 'plusieurs instruments comportent'
-          } des modifications non sauvegardées.`}
+          {textContent.unsavedInstrumentsWarning[instrumentIds.length === 1 ? 0 : 1]}
         </p>
         <div className='mt-4 flex justify-between gap-4'>
           <button className='cancel-button' onClick={resetIds}>
-            Annuler
+            {buttons.cancel[0]}
           </button>
-          <button className='primary-button' onClick={() => handleSaveAndCloseOrQuit(false)}>{`${
-            actionType === 'close' ? 'Fermer' : 'Quitter'
-          } sans enregistrer`}</button>
+          <button className='primary-button' onClick={() => handleSaveAndCloseOrQuit(false)}>
+            {actionType === 'close' ? buttons.closeWithoutSaving[0] : buttons.quitWithoutSaving[0]}
+          </button>
           <button className='primary-button' onClick={() => handleSaveAndCloseOrQuit(true)}>
             {instrumentIds.length === 1
-              ? `Enregistrer et ${actionType === 'close' ? 'fermer' : 'quitter'}`
-              : `Tout enregistrer et ${actionType === 'close' ? 'fermer' : 'quitter'}`}
+              ? actionType === 'close'
+                ? buttons.saveAndClose[0]
+                : buttons.saveAndQuit[0]
+              : actionType === 'close'
+              ? buttons.saveAllAndClose[0]
+              : buttons.saveAllAndQuit[0]}
           </button>
         </div>
       </div>

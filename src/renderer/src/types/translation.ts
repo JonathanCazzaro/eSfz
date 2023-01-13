@@ -1,6 +1,8 @@
 interface Buttons {
   createInstrument: string[];
   openInstrument: string[];
+  saveInstrument: string[];
+  saveAll: string[];
   openSettings: string[];
   openGithub: string[];
   validate: string[];
@@ -11,7 +13,11 @@ interface Buttons {
   showSettings: string[];
   hideSettings: string[];
   saveAndQuit: string[];
+  saveAndClose: string[];
+  saveAllAndQuit: string[];
+  saveAllAndClose: string[];
   quitWithoutSaving: string[];
+  closeWithoutSaving: string[];
   welcomeTab: string[];
 }
 
@@ -43,6 +49,11 @@ interface Inputs {
   instrument_label: string[];
   author_label: string[];
   directory_label: string[];
+  autosave_label: string[];
+  defaultdevice_label: string[];
+  unidentified_label: string[];
+  nodevice_label: string[];
+  midi_label: string[];
 }
 
 interface Headers {
@@ -55,6 +66,11 @@ interface Headers {
 
 interface TextContent {
   welcome: string[];
+  noDeviceWarning: string[];
+  noAvailableSamples: string[];
+  unsupportedDeviceWarning: string[];
+  unsavedInstrumentsWarning: string[];
+  unreachableDevicesWarning: string[];
 }
 
 export interface TranslationInterface {
