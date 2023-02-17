@@ -41,6 +41,7 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, handleClose }) => {
       <div className='p-4'>
         <h2 className='w-full rounded-md bg-slate-800 py-1 pl-9 font-semibold text-slate-400'>{sections.settings_general[0]}</h2>
         <div className='my-4 px-2'>
+          <div></div>
           <div className='flex items-center gap-3 whitespace-nowrap'>
             <p>{inputs.defaultDirectory_label} :</p>
             <div className='flex w-full items-center gap-2 rounded-lg bg-slate-100 px-2'>

@@ -46,7 +46,7 @@ Don't hesitate to get in touch with me if you're interested !
 - [x] Loading existing project
 - [x] SFZ export
 - [ ] Autosave
-- [ ] EN version
+- [x] EN version
 - [ ] Handling errors from main process
 - [ ] Keyboard shortcuts 
 

@@ -4,12 +4,13 @@ import { HiOutlineChevronDown as ArrowDown } from 'react-icons/hi2';
 import { HiOutlineRefresh as RefreshIcon } from 'react-icons/hi';
 
 interface SelectorProps {
+  label?: string;
   selectedOption?: string;
   children: ReactNode;
   onRefresh?: () => void;
 }
 
-const Selector: React.FC<SelectorProps> = ({ children, selectedOption, onRefresh }) => {
+const Selector: React.FC<SelectorProps> = ({ children, label, selectedOption, onRefresh }) => {
   const [isOpen, setIsOpen] = useState(false);
   const componentRef = useRef<HTMLDivElement>(null);
 
